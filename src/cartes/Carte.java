@@ -4,15 +4,13 @@ import java.awt.Color;
 
 public class Carte {
 	
-	private final String[] tabColor = { "noir", "rouge" };
-	
 	private int hauteur;
-	private int couleur;
+	private Couleur couleur;
 	
 	/*
 	 * Constructor
 	 */
-	public Carte(int hauteur, int couleur) {
+	public Carte(int hauteur, Couleur couleur) {
 		this.hauteur = hauteur;
 		this.couleur = couleur;
 	}
@@ -24,7 +22,7 @@ public class Carte {
 		this.hauteur = h;
 	}
 	
-	public void setCouleur(int c) {
+	public void setCouleur(Couleur c) {
 		this.couleur = c;
 	}
 	
@@ -35,7 +33,7 @@ public class Carte {
 		return this.hauteur;
 	}
 	
-	public int getCouleur() {
+	public Couleur getCouleur() {
 		return this.couleur;
 	}
 	
@@ -43,6 +41,6 @@ public class Carte {
 	 * Return string card
 	 */
 	public String toString() {
-		return this.hauteur + " - " + this.tabColor[this.couleur];
+		return this.hauteur + " - " + this.couleur;
 	}
 }

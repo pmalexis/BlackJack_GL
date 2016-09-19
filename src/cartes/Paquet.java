@@ -71,10 +71,22 @@ public class Paquet {
 	
 	/*
 	 * Cut pack card
+	 * VOIR SI REMVOIE DE ALTEMPO !!!
 	 */
 	public boolean cutPack() {
 		if(this.alCard.isEmpty()) return false;
 		
+		ArrayList<Carte> alTempo = new ArrayList<Carte>();
+		
+		int index = (int) (Math.random() * ( (this.alCard.size()-3) - 3 ));
+		for(int i=0;i<index-1;i++) {
+			alTempo.add(this.alCard.get(0));
+			this.alCard.remove(0);
+		}
+		
+		for(int i=0;i<alTempo.size();i++) 
+			this.alCard.add(alTempo.get(i));
+			
 		return true;
 	}
 	
@@ -92,7 +104,6 @@ public class Paquet {
 		String s = "";
 		
 		for(int i=0;i<this.alCard.size();i++) {
-			if(this.alCard.get(i).getHauteur() == 1) s += "-------------------------------------\n";
 			s += this.alCard.get(i).toString() + "\n";
 		}
 		return s;
