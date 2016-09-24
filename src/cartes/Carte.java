@@ -41,6 +41,6 @@ public class Carte {
 	 * Return string card
 	 */
 	public String toString() {
-		return this.hauteur + " - " + this.couleur;
+		return (this.hauteur<10?"0"+this.hauteur:(this.hauteur>10?10:this.hauteur)) + " - " + this.couleur;
 	}
 }

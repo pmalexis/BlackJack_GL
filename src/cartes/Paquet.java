@@ -32,21 +32,19 @@ public class Paquet {
 	/*
 	 * remove card top
 	 */
-	public boolean dropTop() {
-		if(this.alCard.isEmpty()) return false;
+	public Carte dropTop() {
+		if(this.alCard.isEmpty()) return null;
 			
-		this.alCard.remove(this.alCard.size());
-		return true;
+		return this.alCard.remove(this.alCard.size()-1);
 	}
 	
 	/*
 	 * remove card bot
 	 */
-	public boolean dropBot() {
-		if(this.alCard.isEmpty()) return false;
+	public Carte dropBot() {
+		if(this.alCard.isEmpty()) return null;
 		
-		this.alCard.remove(0);
-		return true;
+		return this.alCard.remove(0);
 	}
 	
 	/*
@@ -56,7 +54,7 @@ public class Paquet {
 		if(this.alCard.isEmpty()) return null;
 		
 		int index = (int) (Math.random() * ( this.alCard.size() - 0 ));
-		return this.alCard.get(index);
+		return this.alCard.remove(index);
 	}
 	
 	/*

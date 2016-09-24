@@ -7,7 +7,7 @@ public enum Couleur {
 	Pique ("pique"),
 	Trefle ("trefle"),
 	Coeur ("coeur"),
-	Carre ("carre");
+	Carreau ("carreau");
 	
 	private String name = "";
  
