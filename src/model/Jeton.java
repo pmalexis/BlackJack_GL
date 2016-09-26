@@ -1,4 +1,4 @@
-package cartes;
+package model;
 
 public enum Jeton {
 

@@ -1,4 +1,4 @@
-package cartes;
+package model;
 
 public class MoteurBlackjack {
 
@@ -10,7 +10,9 @@ public class MoteurBlackjack {
 	
 	private Carte[][] hands; //la main des joueurs + banquier
 	
-	private Jeton[][] jetonsTable; //savoir combien les joueurs ont misé sur la table
+	private int[] betTable; //savoir combien les joueurs ont mise sur la table
+	private int[] insurance;
+	private int[] yourMoney;
 	
 	/*
 	 * Constructor
@@ -26,8 +28,9 @@ public class MoteurBlackjack {
 	 * initialization of the class
 	 */
 	public void initAll() {
-		this.hands       = new Carte[ (this.nb_players*2) + 1][10];
-		this.jetonsTable = new Jeton[ (this.nb_players) ][9];
+		this.hands     = new Carte[ (this.nb_players*2) + 1][10];
+		this.betTable  = new int[ (this.nb_players*2) ];
+		this.insurance = new int[this.nb_players];
 	
 		this.initPaquet();
 	}
@@ -76,17 +79,6 @@ public class MoteurBlackjack {
 	}
 	
 	/*
-	 * double jeton
-	 */
-	public boolean double_(int player_now) {
-		
-		this.hit(player_now);
-		//this.jetonsTable[player_now] = this.jetonsTable[player_now] * 2;
-		
-		return true;
-	}
-	
-	/*
 	 * split 
 	 */
 	public boolean split(int player_now) {
@@ -104,20 +96,20 @@ public class MoteurBlackjack {
 	} 
 	
 	/*
-	 * 
+	 * do a insurance
+	 * bet half of your actual bet on the next (value 2:1)
 	 */
-	public boolean assurance(int player_now) {
+	public boolean insurance(int player_now) {
 		
 		if(this.hands[0][0].getHauteur() == 1) {
-			
+			this.insurance[player_now] = this.betTable[player_now]/2;
 			return true;
 		}
-		
 		return false;
 	}
 	
 	/*
-	 * 
+	 * return 21 if blackjack
 	 */
 	public boolean blackjack(int player_now) {
 		int n = 0;
@@ -131,9 +123,24 @@ public class MoteurBlackjack {
 		return n == 21;
 	}
 	
+	/*
+	 * Say if you can split
+	 */
 	public boolean canSplit(int player_now) {
 		return (this.hands[player_now][0].getHauteur()>10?10:this.hands[player_now][0].getHauteur()) 
 				== (this.hands[player_now][1].getHauteur()>10?10:this.hands[player_now][1].getHauteur());
+	}
+	
+	/*
+	 * the bank play value card enter 17 and 21
+	 */
+	public boolean bankPlay() {
+		
+		while (this.getValeurJoueur(0) < 17) {
+			this.hit(0);
+		} 
+		
+		return true;
 	}
 	
 	/* --------------------------- *
@@ -160,16 +167,28 @@ public class MoteurBlackjack {
 		return s;
 	}
 	
+	public int getBetPlayer(int player_now) {
+		return this.betTable[player_now];
+	}
+	
 	public int getValeurJoueur(int i) {
 		int n  = 0;
 		int as = 0;
+		int h  = 0;
 		
 		for(int j=0;j<this.hands[0].length;j++)
-			if(this.hands[i][j] != null) 
+			if(this.hands[i][j] != null) {
+				h++;
 				if(this.hands[i][j].getHauteur() == 1) as++;
 				else n += (this.hands[i][j].getHauteur()>10?10:this.hands[i][j].getHauteur());
+			}
 		
-		if(as > 0) n++;
+		for(int j=1;j<=as;j++)
+			if(n + 11 <= 21) {
+				if(as >= 2 && h > 2 && j > 1) n++;
+				else n += 11;
+			}
+			else n++;
 		
 		return n;
 	}
@@ -177,7 +196,8 @@ public class MoteurBlackjack {
 	/* --------------------------- *
 	 *   SET - change the values
 	 * --------------------------- */
-	public void setJetonTable(int player_now, Jeton valeur_jeton) {
+	public void setBetTable(int player_now, int n) {
+		this.betTable[player_now] += n;
 	}
 	
 	/*

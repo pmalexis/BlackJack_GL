@@ -1,4 +1,4 @@
-package cartes;
+package model;
 
 /*
  * couleur = pique, trefle, coeur, carre
