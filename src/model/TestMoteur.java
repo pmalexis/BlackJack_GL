@@ -51,7 +51,7 @@ public class TestMoteur {
 						for(int i=1;i<=nb_players;i++) {
 							boolean finMise = false;
 							do {
-								System.out.println("Joueur " + i + " vous avez " + mBJ.getMoney(i-1) + "€ , misez : 0 (FIN) | 1 | 5 | 10 | 25 | 50 | 100 | 500 | 1000 | 5000 ||| MISE ACTUEL => " + mBJ.getPlayers()[i].getBet());
+								System.out.println("Joueur " + i + " vous avez " + mBJ.getMoney(i-1) + "â‚¬ , misez : 0 (FIN) | 1 | 5 | 10 | 25 | 50 | 100 | 500 | 1000 | 5000 ||| MISE ACTUEL => " + mBJ.getPlayers()[i].getBet());
 								int n = Integer.parseInt(sc.nextLine());
 								if(n == 0) finMise = true;
 								else mBJ.setBetTable(i, n);
@@ -217,7 +217,7 @@ public class TestMoteur {
 							br.close(); 
 						}		
 						catch (Exception e){
-							System.out.println("Fichier non trouvé, il a donc ete cree");
+							System.out.println("Fichier non trouvÃ©, il a donc ete cree");
 							new File("res/joueurs.txt");
 						}
 						
@@ -298,7 +298,7 @@ public class TestMoteur {
 						br.close(); 
 					}		
 					catch (Exception e){
-						System.out.println("Fichier non trouvé, il a donc ete cree");
+						System.out.println("Fichier non trouvÃ©, il a donc ete cree");
 						new File("res/joueurs.txt");
 					}
 					System.out.println("\nAPPUYER SUR ENTREE POUR RETURNER AU MENU");
