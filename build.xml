@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project name="Génie Logiciel" basedir="." default="build">
+    <property name="src.dir" value="src"/>
+    <property name="name" value="Génie Logiciel"/>
+
+
+    <target name="compile" description="Compile source tree java files">
+      <!--<mkdir dir="${build.dir}"/>-->
+      <javac source="1.8" target="1.8">
+         <src path="${src.dir}"/>
+      </javac>
+    </target>
+
+    <target name="clean" description="Clean output directories">
+      <delete>
+         <fileset dir="${src.dir}">
+            <include name="**/*.class"/>
+         </fileset>
+      </delete>
+    </target>
+    
+    <target name="server">
+      <java fork="true" failonerror="yes" dir="${src.dir}" classname="controller.Server">
+         <arg line=""/>
+      </java>
+   </target>
+    
+    <target name="client">
+      <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.client.Client">
+         <arg line=""/>
+      </java>
+   </target>
+    
+</project>
