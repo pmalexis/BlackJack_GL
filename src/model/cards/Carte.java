@@ -1,6 +1,4 @@
-package model;
-
-import java.awt.Color;
+package model.cards;
 
 public class Carte {
 	

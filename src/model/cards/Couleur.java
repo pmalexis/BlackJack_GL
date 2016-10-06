@@ -1,4 +1,4 @@
-package model;
+package model.cards;
 
 /*
  * couleur = pique, trefle, coeur, carre

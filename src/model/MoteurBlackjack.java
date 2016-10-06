@@ -1,51 +1,47 @@
 package model;
 
+import java.util.ArrayList;
+
+import model.cards.Carte;
+import model.cards.Couleur;
+import model.cards.Paquet;
+
 public class MoteurBlackjack {
 
-	private final static int NB_CARDS_BY_HANDS_START = 2;
+	private final int NB_CARDS_BY_HANDS_START = 2;
+	private final int NB_PLAYERS_MAX = 5; 
 	
 	private int nb_players;
 	
+	private Player[] tabPlayers;
+	
 	private Paquet paquet; //Le paquet de carte
-	
-	private Carte[][] hands; //la main des joueurs + banquier
-	
-	private int[] betTable; //savoir combien les joueurs ont mise sur la table
-	private int[] insurance;
-	private int[] yourMoney;
 	
 	/*
 	 * Constructor
 	 */
 	public MoteurBlackjack(int nb_players) {
-		this.paquet = new Paquet();
 		this.nb_players = nb_players;
 		
 		this.initAll();
 	}
 	
 	/*
-	 * initialization of the class
+	 * initialization of the paquet and tabPlayers
 	 */
-	public void initAll() {
-		this.hands     = new Carte[ (this.nb_players*2) + 1][10];
-		this.betTable  = new int[ (this.nb_players*2) ];
-		this.insurance = new int[this.nb_players];
-	
-		this.initPaquet();
-	}
-	
-	/*
-	 * initialization of the paquet
-	 */
-	public boolean initPaquet() {
+	public boolean initAll() {
+		this.paquet = new Paquet();
 		Couleur[] tabCouleur = {Couleur.Pique, Couleur.Trefle, Couleur.Carreau, Couleur.Coeur};
 		
 		for(int nb_pack=0;nb_pack<1;nb_pack++) //nb pack
-			for(int i=0;i<4;i++) // 4 couleurs
-				for(int j=1;j<14;j++) { // 13 cartes
-					paquet.addTop(new Carte(j, tabCouleur[i]));
+			for(int i=0;i<4;i++) // 4 colors
+				for(int j=1;j<14;j++) { // 13 cards
+					this.paquet.addTop(new Carte(j, tabCouleur[i]));
 				}
+		
+		this.tabPlayers = new Player[this.NB_PLAYERS_MAX + 1];
+		for(int i=0;i<this.nb_players+1;i++)
+			this.tabPlayers[i] = new Player((i>0?"Joueur "+i:"Banquier"));
 			
 		return true;
 	}
@@ -56,9 +52,9 @@ public class MoteurBlackjack {
 	public boolean distribution() {
 		this.paquet.mixCards();
 		
-		for(int i=0;i<MoteurBlackjack.NB_CARDS_BY_HANDS_START;i++) 
-			for(int j=0;j< (this.hands.length - this.nb_players) ;j++) {
-				this.hands[j][i] = this.paquet.dropTop();
+		for(int i=0;i<this.NB_CARDS_BY_HANDS_START;i++) 
+			for(int j=0;j<this.nb_players+1;j++) {
+				this.tabPlayers[j].getHand().addTop(this.paquet.dropTop());
 			}
 		
 		return true;
@@ -67,15 +63,14 @@ public class MoteurBlackjack {
 	/*
 	 * a turn 
 	 */
-	public boolean hit(int player_now) {
+	public void hit(int player_now, boolean split) {
 		
-		for(int i=0;i<this.hands[0].length;i++)
-			if(this.hands[player_now][i] == null) {
-				this.hands[player_now][i] = this.paquet.dropTop();
-				break;
-			}
+		Paquet alPaquet;
+		if(split) alPaquet = this.tabPlayers[player_now].getSplit();
+		else alPaquet = this.tabPlayers[player_now].getHand();
 		
-		return true;
+		if(this.tabPlayers[player_now] != null)
+			alPaquet.addBot(this.paquet.dropTop());
 	}
 	
 	/*
@@ -83,11 +78,10 @@ public class MoteurBlackjack {
 	 */
 	public boolean split(int player_now) {
 		
-		if( this.canSplit(player_now) ) 
-		{	
-			this.hands[player_now + this.nb_players][0] = this.hands[player_now][1];
-			this.hands[player_now + this.nb_players][1] = this.paquet.dropTop();
-			this.hands[player_now][1]                   = this.paquet.dropTop();
+		if(this.canSplit(player_now) ) {	
+			this.tabPlayers[player_now].getSplit().addBot(this.tabPlayers[player_now].getHand().dropBot());
+			this.tabPlayers[player_now].getSplit().addBot(this.paquet.dropTop());
+			this.tabPlayers[player_now].getHand().addBot(this.paquet.dropTop());
 					
 			return true;
 		}
@@ -101,8 +95,8 @@ public class MoteurBlackjack {
 	 */
 	public boolean insurance(int player_now) {
 		
-		if(this.hands[0][0].getHauteur() == 1) {
-			this.insurance[player_now] = this.betTable[player_now]/2;
+		if(this.tabPlayers[player_now].getHand().getAlCard().get(0).getHauteur() == 1) {
+			this.tabPlayers[player_now].setInsurance(this.tabPlayers[player_now].getBet()/2);
 			return true;
 		}
 		return false;
@@ -114,11 +108,14 @@ public class MoteurBlackjack {
 	public boolean blackjack(int player_now) {
 		int n = 0;
 		
-		if(this.hands[player_now][0].getHauteur() == 1) n += 11;
-		else n += this.hands[player_now][0].getHauteur() > 10 ? 10 : this.hands[player_now][0].getHauteur();
+		int ifOne = this.tabPlayers[player_now].getHand().getAlCard().get(0).getHauteur();
+		int ifTwo = this.tabPlayers[player_now].getHand().getAlCard().get(1).getHauteur();
 		
-		if(this.hands[player_now][1].getHauteur() == 1) n += 11;
-		else n += this.hands[player_now][1].getHauteur() > 10 ? 10 : this.hands[player_now][1].getHauteur();
+		if(ifOne == 1) n += 11;
+		else n += ifOne > 10 ? 10 : ifOne;
+		
+		if(ifTwo == 1) n += 11;
+		else n += ifTwo > 10 ? 10 : ifTwo;
 		
 		return n == 21;
 	}
@@ -127,20 +124,49 @@ public class MoteurBlackjack {
 	 * Say if you can split
 	 */
 	public boolean canSplit(int player_now) {
-		return (this.hands[player_now][0].getHauteur()>10?10:this.hands[player_now][0].getHauteur()) 
-				== (this.hands[player_now][1].getHauteur()>10?10:this.hands[player_now][1].getHauteur());
+		
+		int one = this.tabPlayers[player_now].getHand().getAlCard().get(0).getHauteur();
+		int two = this.tabPlayers[player_now].getHand().getAlCard().get(1).getHauteur();
+		
+		return (one>10?10:one) == (two>10?10:two);
 	}
 	
 	/*
 	 * the bank play value card enter 17 and 21
+	 * strategie
 	 */
 	public boolean bankPlay() {
 		
-		while (this.getValeurJoueur(0) < 17) {
-			this.hit(0);
+		while (this.tabPlayers[0].getValue(false) < 17) {
+			this.hit(0, false);
 		} 
 		
 		return true;
+	}
+	
+	/*
+	 * Reset at zero on the position give in the function
+	 */
+	public void resetBetTable(int player_now) {
+		this.tabPlayers[player_now].setBet(0);
+	}
+	
+	/*
+	 * the bet return to the player 
+	 */
+	public void backBet() {
+		for(int i=1;i<this.nb_players+1;i++) {
+			if(this.tabPlayers[i] != null)
+				this.tabPlayers[i].setMoney(this.tabPlayers[i].getMoney() + this.tabPlayers[i].getBetSplit());
+				this.tabPlayers[i].setMoney(this.tabPlayers[i].getMoney() + this.tabPlayers[i].getBet());
+		}
+	}
+	
+	/*
+	 * Add the value n int the betTable at the position i
+	 */
+	public void addBetTable(int player_now, int n) {
+		this.tabPlayers[player_now].setBet(this.tabPlayers[player_now].getBet() + n);
 	}
 	
 	/* --------------------------- *
@@ -150,74 +176,25 @@ public class MoteurBlackjack {
 		return this.paquet;
 	}
 	
-	public Carte[][] getHands() {
-		return this.hands;
+	public Player[] getPlayers() {
+		return this.tabPlayers;
 	}
 	
-	public String getHand(int player_now) {
-		String s = "";
-		
-		if(player_now == 0) s+= "Banquier : ";
-		else s+= (player_now>this.nb_players?"Joueur BIS " +(player_now-this.nb_players):"Joueur " + player_now) + " : ";
-		
-		for(int j=0;j<this.hands[0].length;j++)
-			if(this.hands[player_now][j] != null)
-				s += (player_now == 0 && j > 0 ? "--------- | " : this.hands[player_now][j] + " | " ) ;
-		
-		return s;
-	}
-	
-	public int getBetPlayer(int player_now) {
-		return this.betTable[player_now];
-	}
-	
-	public int getValeurJoueur(int i) {
-		int n  = 0;
-		int as = 0;
-		int h  = 0;
-		
-		for(int j=0;j<this.hands[0].length;j++)
-			if(this.hands[i][j] != null) {
-				h++;
-				if(this.hands[i][j].getHauteur() == 1) as++;
-				else n += (this.hands[i][j].getHauteur()>10?10:this.hands[i][j].getHauteur());
-			}
-		
-		for(int j=1;j<=as;j++)
-			if(n + 11 <= 21) {
-				if(as >= 2 && h > 2 && j > 1) n++;
-				else n += 11;
-			}
-			else n++;
-		
-		return n;
+	public int getMoney(int player_now) {
+		return this.tabPlayers[player_now].getMoney();
 	}
 	
 	/* --------------------------- *
 	 *   SET - change the values
 	 * --------------------------- */
-	public void setBetTable(int player_now, int n) {
-		this.betTable[player_now] += n;
-	}
-	
-	/*
-	 * return string ...
-	 */
-	public String toString() {
-		String s = "";
-	
-		for(int i=0;i<this.hands.length;i++) {
-			for(int j=0;j<this.hands[0].length;j++) {
-				if(j==0) {
-					if(i==0) s+= "Banquier : ";
-					else s+= "Joueur " + i + " : ";
-				}
-				if(this.hands[i][j] != null)
-					s += this.hands[i][j] + " | ";
-			}
-			s += "\n";
+	public boolean setBetTable(int player_now, int n) {
+		if(this.tabPlayers[player_now].getMoney() >= n) {
+			this.tabPlayers[player_now].setBet(n + this.tabPlayers[player_now].getBet());
+			this.tabPlayers[player_now].setMoney(this.tabPlayers[player_now].getMoney() - n);
+			
+			return false;
 		}
 		
-		return s;
+		return false;
 	}
 }
