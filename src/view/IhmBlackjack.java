@@ -1,18 +1,12 @@
 package view;
 
-import java.awt.BorderLayout;
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
-import controler.Controleur;
-
 public class IhmBlackjack extends JFrame {
 
-	public IhmBlackjack(Controleur crtl) {
+	public IhmBlackjack() {
 		
 		this.setTitle("BLACKJACK");
 		this.setLocation(100, 100);
@@ -37,6 +31,6 @@ public class IhmBlackjack extends JFrame {
 	public void initCredit() {}
 	
 	public static void main(String[] args) {
-		IhmBlackjack ihm = new IhmBlackjack(new Controleur(2));
+		IhmBlackjack ihm = new IhmBlackjack();
 	}
 }
