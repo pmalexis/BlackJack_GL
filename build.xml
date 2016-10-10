@@ -31,4 +31,10 @@
       </java>
    </target>
     
+    <target name="ihm">
+      <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.IhmBlackjack">
+         <arg line=""/>
+      </java>
+   </target>
+    
 </project>
