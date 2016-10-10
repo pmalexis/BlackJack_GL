@@ -16,13 +16,20 @@ public class IhmBlackjack extends JFrame {
 		
 		this.setTitle("BLACKJACK");
 		this.setLocation(100, 100);
-		this.setSize(600, 640);
+		this.setSize(800, 600);
 		
 		//gerer la fermeture fenetre
 		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent evt) {
-				System.exit(0);
-			}
+                    
+                    public view.QuitterAction quitterAction = new view.QuitterAction(" Au revoir ! ");
+
+                    public void windowClosing(WindowEvent evt) {
+                        this.quitterAction.actionPerformed(evt);
+                    }
+                    
+//                  public void windowClosing(WindowEvent evt) {
+//			System.exit(0);
+//                  }
 		} );
 
 		this.setVisible(true); 

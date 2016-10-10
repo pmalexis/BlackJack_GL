@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<project name="Génie Logiciel" basedir="." default="build">
+<project name="BlackJack_GL" basedir="." default="build">
     <property name="src.dir" value="src"/>
-    <property name="name" value="Génie Logiciel"/>
+    <property name="name" value="BlackJack_GL"/>
 
 
     <target name="compile" description="Compile source tree java files">
@@ -33,6 +33,12 @@
     
     <target name="ihm">
       <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.IhmBlackjack">
+         <arg line=""/>
+      </java>
+   </target>
+   
+   <target name="TestModele">
+      <java fork="true" failonerror="yes" dir="${src.dir}" classname="model.TestMoteur">
          <arg line=""/>
       </java>
    </target>
