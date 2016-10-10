@@ -1,5 +1,6 @@
 package controller;
 
+import model.MoteurBlackjack;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.io.IOException;
@@ -14,13 +15,14 @@ import java.util.concurrent.locks.Lock;
 public class Server {
     
     static ArrayList<Client> allClient;
+    static MoteurBlackjack mBJ;
     static List<Thread> allChat;
     static int port;
     final static int NB_MAX_CLIENT = 5;
     
     public Server(int port) {
         this.port = port;
-        this.allChat = Collections.synchronizedList(new ArrayList<Thread>());
+        this.mBJ = new MoteurBlackjack(NB_MAX_CLIENT);
         this.allClient = new ArrayList<Client>();
     }
     
@@ -33,24 +35,70 @@ public class Server {
         acceptConnexion.start();
        
 		while(true) {   
-            System.out.println(allClient.size());
-            //if(allClient.size() == 0) { continue; }
-            for(int i = 0; i < allClient.size(); i++) {
-                Client client = allClient.get(i);
-                //System.out.println(allClient.size());
-                Thread bet = new Thread(new Bet(client));
-                bet.start();
-                
-                try {
+            //System.out.println(allClient.size());
+            try {
+                Thread.sleep(10);
+                /* bet */
+                for(int i = 0; i < allClient.size(); i++) {
+                    Client client = allClient.get(i);
+                    if (client == null) {
+                        Thread.sleep(10);
+                        break;
+                    }
+                    //System.out.println(allClient.size());
+                    Thread bet = new Thread(new Bet(client, mBJ));
+                    bet.start();
                     bet.join();
-                } catch (InterruptedException e) {
-                    //System.err.println(e);
+                } 
+                
+                //System.out.println(checkBets());
+                if(!checkBets()) continue;
+                
+                /* ----------- GAME ----------- */
+                sendToAll("Game started", null);
+                /* initialisation */
+                mBJ.initAll();
+                mBJ.distribution();
+                for(int i = 0; i < allClient.size(); i++) {
+                    Client client = allClient.get(i);
+                    if (client == null) {
+                        Thread.sleep(10);
+                        break;
+                    }
+                    
+                    Thread play = new Thread(new Play(client, mBJ));
+                    play.start();
+                    play.join();
                 }
+                
+                /* end of the game */
+                /*reinitiliasitaion of bets */
+                for(Client client : allClient) {
+                    if (client == null) {
+                        Thread.sleep(10);
+                        break;
+                    }
+                    client.setBet(0);
+                }
+                
+             } catch (InterruptedException e) {
+                System.err.println(e);
             }
         
 		}       
 
 	}
+    
+    public static boolean checkBets() {
+        if(allClient.size() == 0) return false;
+        
+        for(Client client: allClient) {
+            if(client.getBet() == 0) return false;
+        }      
+        return true;
+    }
+    
+    public static MoteurBlackjack getMoteur() { return mBJ; }
     
     public static void sendToAll(String message, Socket currentSocket) {
         Thread sendToAll = new Thread(new SendToAll(message, currentSocket));

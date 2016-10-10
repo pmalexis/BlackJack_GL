@@ -19,20 +19,26 @@
       </delete>
     </target>
     
-    <target name="server">
+    <target name="run.server">
       <java fork="true" failonerror="yes" dir="${src.dir}" classname="controller.Server">
          <arg line=""/>
       </java>
    </target>
     
-    <target name="client">
+    <target name="run.client">
       <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.client.Client">
          <arg line=""/>
       </java>
    </target>
     
-    <target name="ihm">
+    <target name="run.ihm">
       <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.IhmBlackjack">
+         <arg line=""/>
+      </java>
+   </target>
+    
+    <target name="run.testMoteur">
+      <java fork="true" failonerror="yes" dir="${src.dir}" classname="model.TestMoteur">
          <arg line=""/>
       </java>
    </target>
