@@ -13,31 +13,43 @@ public class Connexion implements Runnable {
 
     BufferedReader in;
     PrintWriter out;
-    Player player;
+    Socket socket;
     
-	public Connexion(Player player) {
-        this.player = player;
+	public Connexion(Socket socket) {
+        this.socket = socket;
     }
 
 	public void run() {
 		try {
             /* open flux */
             Scanner sc = new Scanner(System.in);
-            out = new PrintWriter(player.getSocket().getOutputStream());
-            in = new BufferedReader(new InputStreamReader(player.getSocket().getInputStream()));
+            out = new PrintWriter(socket.getOutputStream());
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String message;
             String clientName;
             
             /* retrieve client name */
             clientName = in.readLine();
-            player.setName(clientName);
-            System.out.println(player.getName() + " join the server");
+            /* creation of the object client */
+            Client client = new Client(socket, in, out, clientName);
+            Server.addClient(client);
+            System.out.println(client.getName() + " join the server");
             
-            Thread clientServer = new Thread(new ClientServer(in, out, player));
-            clientServer.start();
+            /*while(in.read() != -1) {
+                System.out.println("sdfsdf");
+            }*/
+            
+            /*System.out.println(client.getName() + " left the server");
+            Server.delClient(client);*/
+            
+            /*Thread clientServer = new Thread(new ClientServer(in, out, client));
+            clientServer.start();*/
+            
             
         } catch (IOException e) {
             System.err.println(e);
-        }
+        } /*catch (InterruptedException e) {
+            System.err.println(e);
+        }*/
 	}
 }

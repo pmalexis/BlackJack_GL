@@ -1,4 +1,4 @@
-package controler;
+package controller;
 
 import java.net.Socket;
 import java.net.ServerSocket;
@@ -13,69 +13,60 @@ import java.util.concurrent.locks.Lock;
 
 public class Server {
     
-    static ArrayList<Player> allPlayer;
+    static ArrayList<Client> allClient;
     static List<Thread> allChat;
     static int port;
-    static int nbMaxPlayer;
+    final static int NB_MAX_CLIENT = 5;
     
-    public Server(int port, int nbMaxPlayer) {
+    public Server(int port) {
         this.port = port;
-        this.nbMaxPlayer = nbMaxPlayer;
         this.allChat = Collections.synchronizedList(new ArrayList<Thread>());
-        this.allPlayer = new ArrayList<Player>();
+        this.allClient = new ArrayList<Client>();
     }
     
 	public static void main(String[] args) throws IOException {
 
-        Server server = new Server(1234, 2);
+        Server server = new Server(1234);
 		ServerSocket ss = new ServerSocket(1234);
         
-		while(allPlayer.size() < nbMaxPlayer) {
-			Socket socket = ss.accept();
-            Player player = new Player(socket);
-            allPlayer.add(player);
-			Thread connexion = new Thread(new Connexion(player));
-            connexion.start();
-            allChat.add(connexion);
-		}
+        Thread acceptConnexion = new Thread(new AcceptConnexion(ss, NB_MAX_CLIENT));
+        acceptConnexion.start();
+       
+		while(true) {   
+            System.out.println(allClient.size());
+            //if(allClient.size() == 0) { continue; }
+            for(int i = 0; i < allClient.size(); i++) {
+                Client client = allClient.get(i);
+                //System.out.println(allClient.size());
+                Thread bet = new Thread(new Bet(client));
+                bet.start();
                 
-        sendToAll("Tous les joueurs ont rejoins la partie", null);
-        boolean endGame = false;
-        //sleepChat();
-        for(Player player : allPlayer) {
-            Thread bet = new Thread(new Bet(player));
-            bet.start();
-            try {
-                bet.join();
-            } catch (InterruptedException e) {
-                System.err.println(e);
+                try {
+                    bet.join();
+                } catch (InterruptedException e) {
+                    //System.err.println(e);
+                }
             }
-        }
         
-        sendToAll("Début de la distribution", null);
-        
+		}       
 
 	}
     
     public static void sendToAll(String message, Socket currentSocket) {
-        Thread sendToAll = new Thread(new SendToAll(message, allPlayer, currentSocket));
+        Thread sendToAll = new Thread(new SendToAll(message, currentSocket));
         sendToAll.start();
     }        
     
-    /*public static void sleepChat() {
-        for(Thread thread : allChat) {
-            try {
-                synchronized (thread) {
-                    thread.wait();
-                }
-            } catch (InterruptedException e) {
-                System.err.println(e);
-            }
-        }
-    }*/
+    public static ArrayList<Client> getAllClient() {
+        return allClient;
+    }
     
-    public static ArrayList<Player> getAllPlayer() {
-        return allPlayer;
+    public static void addClient(Client c) {
+        allClient.add(c);
+    }
+    
+    public static boolean delClient(Client c) {
+        return allClient.remove(c);
     }
     
     

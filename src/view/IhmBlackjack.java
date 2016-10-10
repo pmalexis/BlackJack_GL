@@ -8,11 +8,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import controler.Controleur;
+import controller.Server;
 
 public class IhmBlackjack extends JFrame {
 
-	public IhmBlackjack(Controleur crtl) {
+	public IhmBlackjack(Server server) {
 		
 		this.setTitle("BLACKJACK");
 		this.setLocation(100, 100);
@@ -37,6 +37,6 @@ public class IhmBlackjack extends JFrame {
 	public void initCredit() {}
 	
 	public static void main(String[] args) {
-		IhmBlackjack ihm = new IhmBlackjack(new Controleur(2));
+		IhmBlackjack ihm = new IhmBlackjack(new Server(1234));
 	}
 }

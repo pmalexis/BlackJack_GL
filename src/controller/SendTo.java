@@ -7,24 +7,23 @@ import java.net.Socket;
 
 public class SendTo implements Runnable {
 
-    private Socket socket;
+    private Client client;
     private String message;
 	
-	public SendTo(String message, Socket socket) {
+	public SendTo(String message, Client client) {
         this.message = message;
-        this.socket = socket;
+        this.client = client;
 	}
 
 	public void run() {		  
 		 
-        try {
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            out.println(message);
-            out.flush();
+        /*try {*/
+            client.getOut().println(message);
+            client.getOut().flush();
         
-        } catch (IOException e) {
+/*        } catch (IOException e) {
             System.err.println(e);
-        }
+        }*/
 			  
 	}
 }

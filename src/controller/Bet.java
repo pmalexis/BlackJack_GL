@@ -11,27 +11,40 @@ import java.io.InputStreamReader;
 
 public class Bet implements Runnable {
 
-    private Player player;
+    private Client client;
 	
-	public Bet(Player player){
-        this.player = player;        
+	public Bet(Client client){
+        this.client = client;        
 	}
 	
 	public void run() {
 		
         try {
-            String message = "1";
-            BufferedReader in = new BufferedReader(new InputStreamReader(player.getSocket().getInputStream()));
-            while(!(message).equals("0")) {
-                String announce = player.getName() + ", misez : 0 (FIN) | 1 | 5 | 10 | 25 | 50 | 100 | 500 | 1000 | 5000 ||| MISE ACTUEL => ";// + mBJ.getBetPlayer(i));
-                System.out.println(player.getName()+" : "+message);
-                Thread t = new Thread(new SendTo(player.getName() + " :" + announce, player.getSocket()));
+            String message;
+            while((client.getIn().read() != -1) && (message = client.getIn().readLine()) != null) {
+                String announce = client.getName() + ", misez : 0 (FIN) | 1 | 5 | 10 | 25 | 50 | 100 | 500 | 1000 | 5000 ||| MISE ACTUEL => ";// + mBJ.getBetClient(i));
+                System.out.println(client.getName()+" : "+announce);
+                Thread t = new Thread(new SendTo(client.getName() + " :" + announce, client));
                 t.start();
                 t.join();
-                message = in.readLine();
-                System.out.println(message);
+                
+                if(message == null) continue;
+                
+                if((message).equals("0")) {
+                    System.out.println("Fin des mises pour " + client.getName());
+                    return;
+                }
+                
+                try {
+                    client.setBet(Integer.parseInt(message));
+                } catch (NumberFormatException e) {
+                    System.err.println(e);
+                }
             }
-            System.out.println("Fin des mises pour " + player.getName());
+            
+            System.out.println(client.getName() + " left the server");
+            Server.delClient(client);
+            
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

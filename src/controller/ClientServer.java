@@ -10,29 +10,24 @@ import java.net.Socket;
 
 public class ClientServer implements Runnable {
 
-	private BufferedReader in;
-    private PrintWriter out;
 	private String message = null, name = null;
-    private ArrayList<Player> allPlayer;
-    private Player player;;
+    private Client client;
 	
-	public ClientServer(BufferedReader in, PrintWriter out, Player player){
-		
-		this.in = in;
-        this.out = out;
-		this.player = player;
-        this.allPlayer = Server.getAllPlayer();
+	public ClientServer(Client client){
+		this.client = client;
 	}
 	
 	public void run() {
 		
         try {
-            while((message = in.readLine()) != null) {
-               
-                System.out.println(player.getName()+" : "+message);
-                Server.sendToAll(player.getName() + " :" + message, player.getSocket());
-                
+            while((message = client.getIn().readLine()) != null && client.getIn().read() != -1) {
+                System.out.println(client.getName()+" : "+message);
+                Server.sendToAll(client.getName() + " :" + message, client.getSocket());
             }
+            
+            System.out.println(client.getName() + " left the server");
+            Server.delClient(client);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }

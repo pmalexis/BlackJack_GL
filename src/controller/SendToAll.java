@@ -7,30 +7,28 @@ import java.net.Socket;
 
 public class SendToAll implements Runnable {
 
-    private ArrayList<Player> allPlayer;
     private Socket currentSocket;
     private String message;
+    private Client client;
 	
-	public SendToAll(String message, ArrayList<Player> allPlayer, Socket currentSocket) {
+	public SendToAll(String message, Socket currentSocket) {
         this.message = message;
-        this.allPlayer = allPlayer;
         this.currentSocket = currentSocket;
 	}
 
 	public void run() {		  
 		 
-        try {
+       // try {
             if(currentSocket == null) System.out.println(message);
-            for(Player player : allPlayer) {
-                Socket socket = player.getSocket();
+            for(Client client : Server.getAllClient()) {
+                Socket socket = client.getSocket();
                 if(currentSocket != null && currentSocket.equals(socket)) continue;
-                PrintWriter out = new PrintWriter(socket.getOutputStream());
-                out.println(message);
-                out.flush();
+                client.getOut().println(message);
+                client.getOut().flush();
             }
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             System.err.println(e);
         }
-			  
+		*/	  
 	}
 }

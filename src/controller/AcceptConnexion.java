@@ -21,11 +21,9 @@ public class AcceptConnexion implements Runnable {
             while(true) {
                 if(Server.getAllClient().size() < nbMaxClient) {
                     Socket socket = ss.accept();
-                    Client client = new Client(socket);
-                    Server.addClient(client);
-                    Thread connexion = new Thread(new Connexion(client));
+                    Thread connexion = new Thread(new Connexion(socket));
                     connexion.start();
-                }   
+                }  
             } 
         } catch (IOException e) {
             e.printStackTrace();
