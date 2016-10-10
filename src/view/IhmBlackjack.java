@@ -12,7 +12,7 @@ import controller.Server;
 
 public class IhmBlackjack extends JFrame {
 
-	public IhmBlackjack(Server server) {
+	public IhmBlackjack(/*Server server*/) {
 		
 		this.setTitle("BLACKJACK");
 		this.setLocation(100, 100);
@@ -37,6 +37,7 @@ public class IhmBlackjack extends JFrame {
 	public void initCredit() {}
 	
 	public static void main(String[] args) {
-		IhmBlackjack ihm = new IhmBlackjack(new Server(1234));
+		//IhmBlackjack ihm = new IhmBlackjack(new Server(1234));
+        IhmBlackjack ihm = new IhmBlackjack();
 	}
 }
