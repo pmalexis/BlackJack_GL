@@ -16,14 +16,7 @@ public class SendTo implements Runnable {
 	}
 
 	public void run() {		  
-		 
-        /*try {*/
-            client.getOut().println(message);
-            client.getOut().flush();
-        
-/*        } catch (IOException e) {
-            System.err.println(e);
-        }*/
-			  
+        client.getOut().println(message);
+        client.getOut().flush();			  
 	}
 }

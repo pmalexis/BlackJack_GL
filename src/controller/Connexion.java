@@ -30,27 +30,16 @@ public class Connexion implements Runnable {
             
             /* retrieve client name */
             clientName = in.readLine();
+            
             /* creation of the object client */
             Client client = new Client(socket, in, out, clientName);
-            client.setId(Server.allClient.size());
+            client.setId(Server.allClient.size()+1);
             Server.addClient(client);
             System.out.println(client.getName() + " a rejoint le serveur");
-            
-            /*while(in.read() != -1) {
-                System.out.println("sdfsdf");
-            }*/
-            
-            /*System.out.println(client.getName() + " left the server");
-            Server.delClient(client);*/
-            
-            /*Thread clientServer = new Thread(new ClientServer(in, out, client));
-            clientServer.start();*/
             
             
         } catch (IOException e) {
             System.err.println(e);
-        } /*catch (InterruptedException e) {
-            System.err.println(e);
-        }*/
+        }
 	}
 }

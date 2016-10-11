@@ -23,7 +23,7 @@ public class MoteurBlackjack {
 	public MoteurBlackjack(int nb_players) {
 		this.nb_players = nb_players;
         
-        //MODIF LUCAS
+        //MODIF SERVEUR
         //this.initAll();
 	}
     
@@ -42,7 +42,7 @@ public class MoteurBlackjack {
 					this.paquet.addTop(new Carte(j, tabCouleur[i]));
 				}
 		
-        /* MODIFICATION LUCAS */
+        /* MODIFICATION SERVEUR */
         /* Permet la compatibilité entre le serveur et le moteur */
         if(allPlayers == null) {
             this.tabPlayers = new Player[this.NB_PLAYERS_MAX + 1];

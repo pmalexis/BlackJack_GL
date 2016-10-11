@@ -55,14 +55,10 @@ public class Server {
                     bet.join();
                 } 
                 
-                //System.out.println(checkBets());
                 if(!checkBets()) continue;
                 /* ----------- GAME ----------- */
                 sendToAll("Game started", null);
-                /* initialisation */
-                /*for(Player p: arrayToTab()) {
-                    System.out.println(p.getName());
-                }*/                
+                /* initialisation */              
                 mBJ.setNbPlayers(allClient.size());
                 mBJ.initAll(clientToPlayer());
                 mBJ.distribution();
@@ -83,13 +79,15 @@ public class Server {
                 }
                 
                 /* end of the game */
-                /*reinitiliasitaion of bets */
+                
+                /*r einitialisation */
                 for(Client client : allClient) {
                     if (client == null) {
                         Thread.sleep(10);
                         break;
                     }
                     client.setBet(0);
+                    client.resetHand();
                 }
                 
              } catch (InterruptedException e) {
@@ -122,8 +120,6 @@ public class Server {
     
     public static void addClient(Client c) {
         allClient.add(c);
-        //mBJ.setNbPlayers(allClient.size());
-        //mBJ.addPlayer(c);
     }
     
     public static boolean delClient(Client c) {
@@ -137,18 +133,5 @@ public class Server {
         }
         
         return allPlayer;
-    }
-    
-/*    public static Player[] arrayToTab() {
-        Player[] allPlayers = new Player[allClient.size()+1];
-        allPlayers[0] = banquier;
-        for(int i = 1; i < allClient.size(); i++) {
-            System.out.println(allClient.get(i));
-            allPlayers[i] = allClient.get(i);
-        }
-        
-        return allPlayers;
-    }*/
-    
-    
+    }    
 }

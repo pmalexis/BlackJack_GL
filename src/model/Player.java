@@ -29,6 +29,11 @@ public class Player {
 		this.betSplit  = 0;
 		this.insurance = 0;
 	}
+    
+    public void resetHand() {
+        this.hand      = new Paquet();
+		this.handSplit = new Paquet(); 
+    }
 	
 	
 	/* --------------------------- *

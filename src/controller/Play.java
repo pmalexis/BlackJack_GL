@@ -60,6 +60,7 @@ public class Play implements Runnable {
                             t.start();
 
                             c = client.getIn().readLine().charAt(0);
+                            System.out.println();
                             
                             switch(c) {
                                 case 'h' : mBJ.hit(client.getId(), false); break;
@@ -113,19 +114,25 @@ public class Play implements Runnable {
                             if(client.getValue(true) > 21) message += "VOUS AVEZ PERDU !\n";
                             else message += "\nATTENDEZ QUE LE BANQUIER JOUE !\n";
                             
-                            t = new Thread(new SendTo(message, client));
+                            t = new Thread(new SendToAll(message, null));
                             t.start();
                         }
                     } while (!turnDown);
                 }
                 if(!mBJ.blackjack(client.getId())) {
                     message = client.getName() + " VOUS ETES A " + client.getValue(false);
-                    if(client.getValue(false) > 21) message += "VOUS AVEZ PERDU !\n";
+                    if(client.getValue(false) > 21) message += " VOUS AVEZ PERDU !\n";
                     else message += "\nATTENDEZ QUE LE BANQUIER JOUE !\n";
                     
-                    t = new Thread(new SendTo(message, client));
+                    t = new Thread(new SendToAll(message, null));
                     t.start();
                 }
+            
+                System.out.println("--------------------------------------------------------------------");
+                boolean split = false;
+                if(!mBJ.blackjack(0)) mBJ.bankPlay();
+                Thread whoWin = new Thread(new WhoWin(client, mBJ));
+                whoWin.start();
 
             
             /*System.out.println("\n" + client.getName() + " a quitté le serveur");
@@ -133,10 +140,7 @@ public class Play implements Runnable {
             
         } catch (IOException e) {   
             e.printStackTrace();
-        }/* catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-        
+        }        
 	}
 
 }
