@@ -14,8 +14,17 @@ public class Client {
 		try {
             
             Scanner sc = new Scanner(System.in);
-            System.out.println("Please enter your name bellow");
-            String name = sc.nextLine();
+            String name;
+            while(true) {
+                System.out.println("Entrez votre nom :");
+                name = sc.nextLine();
+                if(name.equals("")) {
+                    System.out.println("Nom incorrect");
+                }
+                else {
+                    break;
+                }
+            }
             
             /* open flux */
             Socket socket = new Socket("localhost",1234);

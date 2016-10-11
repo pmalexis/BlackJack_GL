@@ -32,8 +32,9 @@ public class Connexion implements Runnable {
             clientName = in.readLine();
             /* creation of the object client */
             Client client = new Client(socket, in, out, clientName);
+            client.setId(Server.allClient.size());
             Server.addClient(client);
-            System.out.println(client.getName() + " join the server");
+            System.out.println(client.getName() + " a rejoind le serveur");
             
             /*while(in.read() != -1) {
                 System.out.println("sdfsdf");
