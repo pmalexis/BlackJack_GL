@@ -22,14 +22,17 @@ public class MoteurBlackjack {
 	 */
 	public MoteurBlackjack(int nb_players) {
 		this.nb_players = nb_players;
-		
-		this.initAll();
+        
+        //MODIF LUCAS
+        //this.initAll();
 	}
+    
+    
 	
 	/*
 	 * initialization of the paquet and tabPlayers
 	 */
-	public boolean initAll() {
+	public boolean initAll(ArrayList<Player> allPlayers) {
 		this.paquet = new Paquet();
 		Couleur[] tabCouleur = {Couleur.Pique, Couleur.Trefle, Couleur.Carreau, Couleur.Coeur};
 		
@@ -39,9 +42,20 @@ public class MoteurBlackjack {
 					this.paquet.addTop(new Carte(j, tabCouleur[i]));
 				}
 		
-		this.tabPlayers = new Player[this.NB_PLAYERS_MAX + 1];
-		for(int i=0;i<this.nb_players+1;i++)
-			this.tabPlayers[i] = new Player((i>0?"Joueur "+i:"Banquier"));
+        /* MODIFICATION LUCAS */
+        /* Permet la compatibilité entre le serveur et le moteur */
+        if(allPlayers == null) {
+            this.tabPlayers = new Player[this.NB_PLAYERS_MAX + 1];
+            for(int i=0;i<this.nb_players+1;i++)
+                this.tabPlayers[i] = new Player((i>0?"Joueur "+i:"Banquier"));
+        }
+        else {
+            allPlayers.add(0, new Player("Banquier"));
+            this.tabPlayers = new Player[this.nb_players + 1];
+            for(int i=0;i<tabPlayers.length;i++) {
+                this.tabPlayers[i] = allPlayers.get(i);
+            }
+        }
 			
 		return true;
 	}
@@ -183,6 +197,10 @@ public class MoteurBlackjack {
 	public int getMoney(int player_now) {
 		return this.tabPlayers[player_now].getMoney();
 	}
+    
+    public int getNbPlayers() {
+        return nb_players;
+    }
 	
 	/* --------------------------- *
 	 *   SET - change the values
@@ -197,4 +215,8 @@ public class MoteurBlackjack {
 		
 		return false;
 	}
+    
+    public void setNbPlayers(int nb_players) {
+        this.nb_players = nb_players;
+    }
 }

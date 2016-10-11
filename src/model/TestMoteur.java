@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /*
  * A FAIRE
@@ -44,7 +45,7 @@ public class TestMoteur {
 					MoteurBlackjack mBJ = new MoteurBlackjack(nb_players);
 					
 					while(true) {
-						mBJ.initAll();
+						mBJ.initAll(null);
 						mBJ.distribution();
 					
 						System.out.println("TOUT D'ABORD MISEZ !");

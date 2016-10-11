@@ -61,8 +61,6 @@ public class Bet implements Runnable {
                         System.err.println(e);
                     }
                 
-                    Server.getMoteur().setBetTable(client.getId(), bet);
-                
             }
             
             System.out.println("\n" + client.getName() + " a quitté le serveur");
