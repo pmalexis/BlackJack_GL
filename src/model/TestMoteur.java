@@ -312,7 +312,7 @@ public class TestMoteur {
 						System.out.println("Fichier non trouvé, il a donc ete cree");
 						new File("res/joueurs.txt");
 					}
-					System.out.println("\nAPPUYER SUR ENTREE POUR RETURNER AU MENU");
+					System.out.println("\nAPPUYER SUR ENTREE POUR RETOURNER AU MENU");
 					while(sc.nextLine() == null) {}
 					break;
 				}
@@ -321,7 +321,7 @@ public class TestMoteur {
 				case 3 : {
 					System.out.println("Ce jeu a ete developpe par :\n- Alexis\n- Guillaume\n- Lucas\n- Nicolas\n\n");
 					System.out.println("Ce blackjack a ete creer pour le projet de genie logiciel en L3 Informatique a l'universite de Caen.");
-					System.out.println("\nAPPUYER SUR ENTREE POUR RETURNER AU MENU");
+					System.out.println("\nAPPUYER SUR ENTREE POUR RETOURNER AU MENU");
 					while(sc.nextLine() == null) {}
 					break;
 				}

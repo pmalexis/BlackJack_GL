@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.lang.NullPointerException;
 
 import model.cards.Carte;
 import model.cards.Couleur;
@@ -18,14 +19,16 @@ public class MoteurBlackjack {
 	/*
 	 * Constructor
 	 */
-	public MoteurBlackjack(){}
+	public MoteurBlackjack(){
+        this.tabPlayers = new ArrayList<Player>();
+    }
     
     /*
 	 * add a player
 	 */
     public boolean addPlayer(Player player) {
-        if(tabPlayers.size()+1 > NB_PLAYERS_MAX) return false;
-        tabPlayers.add(player);
+        if(this.tabPlayers.size() == NB_PLAYERS_MAX) return false;
+        this.tabPlayers.add(player);
         return true;
     }
     

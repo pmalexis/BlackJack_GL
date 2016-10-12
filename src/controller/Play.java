@@ -47,7 +47,9 @@ public class Play implements Runnable {
                         }
                         else {
                             message = banquier.getHandString()+"\n";
-                            message += player.getHandString() + " => " + player.getValue(false) + "\n";
+                            t = new Thread(new SendToAll(message, null));
+                            t.start();
+                            message = player.getHandString() + " => " + player.getValue(false) + "\n";
                             message += player.getName() + " | hit (h) | stand (r) | ";
                             
                             if(cpt == 1) {

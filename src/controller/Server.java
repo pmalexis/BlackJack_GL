@@ -17,14 +17,18 @@ public class Server {
     
     static ArrayList<Client> allClient;
     static MoteurBlackjack mBJ;
+    static boolean inGame;
     static int port;
     final static int NB_MAX_CLIENT = 5;
     final static int NB_CLIENT = 1;
+   
     
     public Server(int port) {
         this.port = port;
+        this.inGame = true;
         this.mBJ = new MoteurBlackjack();
         this.allClient = new ArrayList<Client>();
+
     }
     
 	public static void main(String[] args) throws IOException {
@@ -34,6 +38,8 @@ public class Server {
         
         Thread acceptConnexion = new Thread(new AcceptConnexion(ss, NB_MAX_CLIENT));
         acceptConnexion.start();
+        
+        mBJ.addPlayer(new Player("Banquier"));
         
        
 		while(true) {   
@@ -65,16 +71,19 @@ public class Server {
                     mBJ.setBetTable(allClient.get(i), allClient.get(i).getBet());
                 }
                 
-                for(int i = 0; i < allClient.size(); i++) {
-                    Client client = allClient.get(i);
-                    if (client == null) {
-                        Thread.sleep(10);
-                        break;
+                while(inGame) {
+                
+                    for(int i = 0; i < allClient.size(); i++) {
+                        Client client = allClient.get(i);
+                        if (client == null) {
+                            Thread.sleep(10);
+                            break;
+                        }
+
+                        Thread play = new Thread(new Play(client, mBJ));
+                        play.start();
+                        play.join();
                     }
-                    
-                    Thread play = new Thread(new Play(client, mBJ));
-                    play.start();
-                    play.join();
                 }
                 
                 /* end of the game */
@@ -119,6 +128,7 @@ public class Server {
     
     public static void addClient(Client c) {
         allClient.add(c);
+        //mBJ.addPlayer((Player) c);
     }
     
     public static boolean delClient(Client c) {
@@ -132,5 +142,9 @@ public class Server {
         }
         
         return allPlayer;
-    }    
+    }   
+    
+    public static void setInGame(boolean b) {
+        inGame = b;
+    }
 }
