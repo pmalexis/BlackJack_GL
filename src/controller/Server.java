@@ -23,7 +23,7 @@ public class Server {
     
     public Server(int port) {
         this.port = port;
-        this.mBJ = new MoteurBlackjack(NB_CLIENT);
+        this.mBJ = new MoteurBlackjack();
         this.allClient = new ArrayList<Client>();
     }
     
@@ -59,11 +59,10 @@ public class Server {
                 /* ----------- GAME ----------- */
                 sendToAll("Game started", null);
                 /* initialisation */              
-                mBJ.setNbPlayers(allClient.size());
-                mBJ.initAll(clientToPlayer());
+                mBJ.initAll();
                 mBJ.distribution();
                 for(int i = 0; i < allClient.size();i++) {
-                    mBJ.setBetTable(i+1, allClient.get(i).getBet());
+                    mBJ.setBetTable(allClient.get(i), allClient.get(i).getBet());
                 }
                 
                 for(int i = 0; i < allClient.size(); i++) {

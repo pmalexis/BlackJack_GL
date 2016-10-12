@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.net.Socket;
 import java.io.InputStreamReader;
-
+import model.Player;
 
 public class Play implements Runnable {
 
@@ -29,9 +29,12 @@ public class Play implements Runnable {
                 String message = "";
                 Thread t;
                 char c;
+            
+                Player player = (Player) client;
+                Player banquier = mBJ.getPlayers().get(0);
 
-                if(mBJ.blackjack(client.getId())) {
-                    message = "BLACKJACK pour " + client.getName() + "\nATTENDEZ QUE LE BANQUIER JOUE\n";
+                if(mBJ.blackjack(player)) {
+                    message = "BLACKJACK pour " + player.getName() + "\nATTENDEZ QUE LE BANQUIER JOUE\n";
                     t = new Thread(new SendTo(message, client));
                     t.start();
                     turnDown = true;
@@ -39,19 +42,19 @@ public class Play implements Runnable {
                 else {
                     int cpt = 1;
                     do {
-                        if(client.getValue(false) >= 21) {
+                        if(player.getValue(false) >= 21) {
                             turnDown = true;
                         }
                         else {
-                            message = mBJ.getPlayers()[0].getHandString()+"\n";
-                            message += client.getHandString() + " => " + client.getValue(false) + "\n";
-                            message += client.getName() + " | hit (h) | stand (r) | ";
+                            message = banquier.getHandString()+"\n";
+                            message += player.getHandString() + " => " + player.getValue(false) + "\n";
+                            message += player.getName() + " | hit (h) | stand (r) | ";
                             
                             if(cpt == 1) {
                                 message += "double (d) | ";
-                                if(mBJ.canSplit(client.getId())) message += "split (s) |";
+                                if(mBJ.canSplit(player)) message += "split (s) |";
                             }
-                            if(mBJ.getPlayers()[0].getHand().getAlCard().get(0).getHauteur() == 1 && !assurance) {
+                            if(banquier.getHand().getAlCard().get(0).getHauteur() == 1 && !assurance) {
                                 message += "Assurance (a) |";
                                 assurance = true;
                             }
@@ -63,11 +66,11 @@ public class Play implements Runnable {
                             System.out.println();
                             
                             switch(c) {
-                                case 'h' : mBJ.hit(client.getId(), false); break;
+                                case 'h' : mBJ.hit(player, false); break;
                                 case 'r' : turnDown = true; break;
-                                case 'd' : mBJ.hit(client.getId(), false); mBJ.setBetTable(client.getId(), mBJ.getPlayers()[client.getId()-1].getBet()); turnDown = true; break;
-                                case 's' : mBJ.split(client.getId()); turnSplit = true; cpt--; break;
-                                case 'a' : mBJ.insurance(client.getId()); cpt--; break;
+                                case 'd' : mBJ.hit(player, false); mBJ.setBetTable(player, player.getBet()); turnDown = true; break;
+                                case 's' : mBJ.split(player); turnSplit = true; cpt--; break;
+                                case 'a' : mBJ.insurance(player); cpt--; break;
                                 default: 
                                     message = "Incorrect";
                                     t = new Thread(new SendTo(message, client));
@@ -79,26 +82,26 @@ public class Play implements Runnable {
                         }
 
 
-                        if(!client.getSplit().getAlCard().isEmpty() && turnDown && turnSplit) {
+                        if(!player.getSplit().getAlCard().isEmpty() && turnDown && turnSplit) {
                             boolean turnDownSplit = false;
                             cpt = 1;
                             do {
-                                if(client.getValue(true) >= 21) {
+                                if(player.getValue(true) >= 21) {
                                     turnDownSplit = true;
                                 }
                                 else {
-                                    message = mBJ.getPlayers()[0].getHandString();
-                                    message += client.getHandSplitString() + " => " + client.getValue(true);
-                                    message += client.getName() + " | hit (h) | stand (r) | ";
+                                    message = banquier.getHandString();
+                                    message += player.getHandSplitString() + " => " + player.getValue(true);
+                                    message += player.getName() + " | hit (h) | stand (r) | ";
                                     if(cpt == 1) message += "double (d) | ";
                                     t = new Thread(new SendTo(message, client));
                                     t.start();
 
                                     c = client.getIn().readLine().charAt(0);
                                     switch(c) {
-                                        case 'h' : mBJ.hit(client.getId(), true); break;
+                                        case 'h' : mBJ.hit(player, true); break;
                                         case 'r' : turnDownSplit = true; break;
-                                        case 'd' : mBJ.hit(client.getId(), true); mBJ.getPlayers()[client.getId()-1].setBetSplit(mBJ.getPlayers()[client.getId()-1].getBetSplit()); turnDownSplit = true; break;
+                                        case 'd' : mBJ.hit(player, true); player.setBetSplit(player.getBetSplit()); turnDownSplit = true; break;
                                         default: 
                                             message = "Incorrect";
                                             t = new Thread(new SendTo(message, client));
@@ -110,8 +113,8 @@ public class Play implements Runnable {
                             } while (!turnDownSplit); 
                             cpt = 0;
                             turnSplit = true;
-                            message = client.getName() + " VOUS ETES A " + client.getValue(true);
-                            if(client.getValue(true) > 21) message += "VOUS AVEZ PERDU !\n";
+                            message = player.getName() + " VOUS ETES A " + player.getValue(true);
+                            if(player.getValue(true) > 21) message += "VOUS AVEZ PERDU !\n";
                             else message += "\nATTENDEZ QUE LE BANQUIER JOUE !\n";
                             
                             t = new Thread(new SendToAll(message, null));
@@ -119,9 +122,9 @@ public class Play implements Runnable {
                         }
                     } while (!turnDown);
                 }
-                if(!mBJ.blackjack(client.getId())) {
-                    message = client.getName() + " VOUS ETES A " + client.getValue(false);
-                    if(client.getValue(false) > 21) message += " VOUS AVEZ PERDU !\n";
+                if(!mBJ.blackjack(player)) {
+                    message = player.getName() + " VOUS ETES A " + player.getValue(false);
+                    if(player.getValue(false) > 21) message += " VOUS AVEZ PERDU !\n";
                     else message += "\nATTENDEZ QUE LE BANQUIER JOUE !\n";
                     
                     t = new Thread(new SendToAll(message, null));
@@ -130,13 +133,10 @@ public class Play implements Runnable {
             
                 System.out.println("--------------------------------------------------------------------");
                 boolean split = false;
-                if(!mBJ.blackjack(0)) mBJ.bankPlay();
+                if(!mBJ.blackjack(banquier)) mBJ.bankPlay();
                 Thread whoWin = new Thread(new WhoWin(client, mBJ));
                 whoWin.start();
 
-            
-            /*System.out.println("\n" + client.getName() + " a quitté le serveur");
-            Server.delClient(client);*/
             
         } catch (IOException e) {   
             e.printStackTrace();
