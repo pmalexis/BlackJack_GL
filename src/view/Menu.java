@@ -62,7 +62,7 @@ public class Menu extends JPanel implements MouseMotionListener, MouseListener {
 		g.drawString("CLOSE", getWidth()/3 + getWidth()/12, getHeight()/2 + getHeight()/4 + getHeight()/30); g.setColor(Color.white);
 		
 		g.setFont(new Font("Arial", Font.PLAIN, getWidth()/60));
-		g.drawString("Copyright © 2016 - UFR de Sciences - Universite Caen-Normandie", getWidth()/3 - getWidth()/15, getHeight() - getHeight()/50);
+		g.drawString("Copyright Â© 2016 - UFR de Sciences - Universite Caen-Normandie", getWidth()/3 - getWidth()/15, getHeight() - getHeight()/50);
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -89,7 +89,7 @@ public class Menu extends JPanel implements MouseMotionListener, MouseListener {
 		//OPTION
 		if(this.x >= getWidth()/3 + getWidth()/14 && this.x <= getWidth()/3 + getWidth()/4 + getWidth()/100
 			      && this.y <= getHeight()/2 + getHeight()/18 && this.y >= getHeight()/2 - getHeight()/65) {
-			System.out.println("chut tu l'auras mais avant la détente ok ;)");
+			System.out.println("chut tu l'auras mais avant la detente ok ;)");
 		}
 		
 		//CREDIT
