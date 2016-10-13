@@ -32,6 +32,10 @@ public class MoteurBlackjack {
         return true;
     }
     
+    public boolean delPlayer(Player player) {
+        return this.tabPlayers.remove(player);
+    }
+    
     public void createPlayer(int nb_players) {
         this.tabPlayers = new ArrayList<Player>();
         for(int i=0;i<nb_players+1;i++) 
@@ -132,6 +136,7 @@ public class MoteurBlackjack {
 	 */
 	public boolean blackjack(Player player) {
 		int n = 0;
+        System.out.println(player.getName() + "dans la méthode blackjack");
 		
 		int ifOne = player.getHand().getAlCard().get(0).getHauteur();
 		int ifTwo = player.getHand().getAlCard().get(1).getHauteur();

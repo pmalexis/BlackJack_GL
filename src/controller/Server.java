@@ -17,7 +17,6 @@ public class Server {
     
     static ArrayList<Client> allClient;
     static MoteurBlackjack mBJ;
-    static boolean inGame;
     static int port;
     final static int NB_MAX_CLIENT = 5;
     final static int NB_CLIENT = 1;
@@ -25,7 +24,6 @@ public class Server {
     
     public Server(int port) {
         this.port = port;
-        this.inGame = true;
         this.mBJ = new MoteurBlackjack();
         this.allClient = new ArrayList<Client>();
 
@@ -67,11 +65,12 @@ public class Server {
                 /* initialisation */              
                 mBJ.initAll();
                 mBJ.distribution();
+                System.out.println("Taille de allClient " + allClient.size());
                 for(int i = 0; i < allClient.size();i++) {
                     mBJ.setBetTable(allClient.get(i), allClient.get(i).getBet());
                 }
                 
-                while(inGame) {
+                while(inGame()) {
                 
                     for(int i = 0; i < allClient.size(); i++) {
                         Client client = allClient.get(i);
@@ -88,14 +87,16 @@ public class Server {
                 
                 /* end of the game */
                 
-                /*r einitialisation */
+                /*reinitialisation */
                 for(Client client : allClient) {
                     if (client == null) {
                         Thread.sleep(10);
                         break;
                     }
+                    client.setOver(false);
                     client.setBet(0);
                     client.resetHand();
+                    mBJ.getPlayers().get(0).resetHand();
                 }
                 
              } catch (InterruptedException e) {
@@ -128,11 +129,11 @@ public class Server {
     
     public static void addClient(Client c) {
         allClient.add(c);
-        //mBJ.addPlayer((Player) c);
+        mBJ.addPlayer(c);
     }
     
     public static boolean delClient(Client c) {
-        return allClient.remove(c);
+        return mBJ.delPlayer(c) && allClient.remove(c);
     }
     
     public static ArrayList<Player> clientToPlayer() {
@@ -144,7 +145,12 @@ public class Server {
         return allPlayer;
     }   
     
-    public static void setInGame(boolean b) {
-        inGame = b;
+    public static boolean inGame() {
+        if(allClient.size() == 0) return false;
+        for(Client client : allClient) {
+            if(!client.getOver()) return true;
+        }
+        
+        return false;
     }
 }

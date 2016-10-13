@@ -47,9 +47,9 @@ public class Play implements Runnable {
                         }
                         else {
                             message = banquier.getHandString()+"\n";
-                            t = new Thread(new SendToAll(message, null));
+                            message += player.getHandString() + " => " + player.getValue(false) + "\n";
+                            t = new Thread(new SendToAll(message, client.getSocket()));
                             t.start();
-                            message = player.getHandString() + " => " + player.getValue(false) + "\n";
                             message += player.getName() + " | hit (h) | stand (r) | ";
                             
                             if(cpt == 1) {
@@ -65,7 +65,6 @@ public class Play implements Runnable {
                             t.start();
 
                             c = client.getIn().readLine().charAt(0);
-                            System.out.println();
                             
                             switch(c) {
                                 case 'h' : mBJ.hit(player, false); break;
@@ -79,7 +78,7 @@ public class Play implements Runnable {
                                     t.start();
                                     break;
 
-                            }		
+                            }		 
                             cpt++;
                         }
 
@@ -94,7 +93,9 @@ public class Play implements Runnable {
                                 else {
                                     message = banquier.getHandString();
                                     message += player.getHandSplitString() + " => " + player.getValue(true);
-                                    message += player.getName() + " | hit (h) | stand (r) | ";
+                                    t = new Thread(new SendToAll(message, null));
+                                    t.start();
+                                    message = player.getName() + " | hit (h) | stand (r) | ";
                                     if(cpt == 1) message += "double (d) | ";
                                     t = new Thread(new SendTo(message, client));
                                     t.start();
@@ -116,7 +117,10 @@ public class Play implements Runnable {
                             cpt = 0;
                             turnSplit = true;
                             message = player.getName() + " VOUS ETES A " + player.getValue(true);
-                            if(player.getValue(true) > 21) message += "VOUS AVEZ PERDU !\n";
+                            if(player.getValue(true) > 21) {
+                                message += "VOUS AVEZ PERDU !\n";
+                                client.setOver(true);
+                            }
                             else message += "\nATTENDEZ QUE LE BANQUIER JOUE !\n";
                             
                             t = new Thread(new SendToAll(message, null));
@@ -126,14 +130,16 @@ public class Play implements Runnable {
                 }
                 if(!mBJ.blackjack(player)) {
                     message = player.getName() + " VOUS ETES A " + player.getValue(false);
-                    if(player.getValue(false) > 21) message += " VOUS AVEZ PERDU !\n";
+                    if(player.getValue(false) > 21) {
+                        message += " VOUS AVEZ PERDU !\n";
+                        client.setOver(true);
+                    }
                     else message += "\nATTENDEZ QUE LE BANQUIER JOUE !\n";
                     
                     t = new Thread(new SendToAll(message, null));
                     t.start();
                 }
             
-                System.out.println("--------------------------------------------------------------------");
                 boolean split = false;
                 if(!mBJ.blackjack(banquier)) mBJ.bankPlay();
                 Thread whoWin = new Thread(new WhoWin(client, mBJ));

@@ -34,9 +34,7 @@ public class Connexion implements Runnable {
             
             /* creation of the object client */
             Client client = new Client(socket, in, out, clientName);
-            //client.setId(Server.allClient.size()+1);
             Server.addClient(client);
-            Server.getMoteur().addPlayer(client);
             System.out.println(client.getName() + " a rejoint le serveur");
             
             
