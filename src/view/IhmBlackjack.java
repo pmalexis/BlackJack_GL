@@ -1,50 +1,53 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.Cursor;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
-import controller.Server;
+import controller.Controleur;
 
-public class IhmBlackjack extends JFrame {
+public class IhmBlackjack extends JFrame implements KeyListener {
 
-	public IhmBlackjack(/*Server server*/) {
+	public IhmBlackjack(Controleur crtl) {
+		setTitle("BLACKJACK");
+		setLocation(100, 100);
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		setUndecorated(true);
+		setExtendedState(this.MAXIMIZED_BOTH); 
+		setSize(1024, 768);
+		setResizable(false);
 		
-		this.setTitle("BLACKJACK");
-		this.setLocation(100, 100);
-		this.setSize(800, 600);
-		
-		//gerer la fermeture fenetre
-		addWindowListener(new WindowAdapter() {
-                    
-                    public view.QuitterAction quitterAction = new view.QuitterAction(" Au revoir ! ");
+		add(new Menu(this));
 
-                    public void windowClosing(WindowEvent evt) {
-                        this.quitterAction.actionPerformed(evt);
-                    }
-                    
-//                  public void windowClosing(WindowEvent evt) {
-//			System.exit(0);
-//                  }
-		} );
-
+		addKeyListener(this);
 		this.setVisible(true); 
 	}
 	
-	public void initMenu() {}
+	public void menu() {
+		getContentPane().removeAll();
+		repaint();
+		add(new Menu(this));
+		this.setVisible(true); 
+	}
 	
-	public void initVisuIhm() {}
-	
-	public void initOption() {}
-	
-	public void initCredit() {}
+	public void credit() {
+		getContentPane().removeAll();
+		repaint();
+		add(new Credit(this));
+		this.setVisible(true); 
+	}
+
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) System.exit(0);
+	}
+
+	public void keyReleased(KeyEvent e) {}
+	public void keyTyped(KeyEvent e) {}
 	
 	public static void main(String[] args) {
-		//IhmBlackjack ihm = new IhmBlackjack(new Server(1234));
-        IhmBlackjack ihm = new IhmBlackjack();
+		IhmBlackjack ihm = new IhmBlackjack(new Controleur(2));
 	}
 }
