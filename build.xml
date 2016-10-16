@@ -1,13 +1,29 @@
 <?xml version="1.0"?>
 <project name="BlackJack_GL" basedir="." default="build">
-    <property name="src.dir" value="src"/>
+    <property name="src.dir" value="."/>
+    <property name="serveur.src.dir" value="Serveur/src"/>
+    <property name="client.src.dir" value="Client/src"/>
     <property name="name" value="BlackJack_GL"/>
 
 
-    <target name="compile" description="Compile source tree java files">
+    <target name="compile.all" description="Compile source tree java files">
       <!--<mkdir dir="${build.dir}"/>-->
       <javac source="1.8" target="1.8">
          <src path="${src.dir}"/>
+      </javac>
+    </target>
+    
+    <target name="compile.server" description="Compile source tree java files">
+      <!--<mkdir dir="${build.dir}"/>-->
+      <javac source="1.8" target="1.8">
+         <src path="${serveur.src.dir}"/>
+      </javac>
+    </target>
+    
+    <target name="compile.client" description="Compile source tree java files">
+      <!--<mkdir dir="${build.dir}"/>-->
+      <javac source="1.8" target="1.8">
+         <src path="${client.src.dir}"/>
       </javac>
     </target>
 
@@ -20,19 +36,19 @@
     </target>
     
     <target name="run.server">
-      <java fork="true" failonerror="yes" dir="${src.dir}" classname="controller.Server">
+      <java fork="true" failonerror="yes" dir="${server.src.dir}" classname="controller.Server">
          <arg line=""/>
       </java>
    </target>
     
     <target name="run.client">
-      <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.client.Client">
+      <java fork="true" failonerror="yes" dir="${client.src.dir}" classname="view.client.Client">
          <arg line=""/>
       </java>
    </target>
     
     <target name="run.ihm">
-      <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.IhmBlackjack">
+      <java fork="true" failonerror="yes" dir="${client.src.dir}" classname="view.IhmBlackjack">
          <arg line=""/>
       </java>
    </target>

@@ -48,6 +48,6 @@ public class IhmBlackjack extends JFrame implements KeyListener {
 	public void keyTyped(KeyEvent e) {}
 	
 	public static void main(String[] args) {
-		IhmBlackjack ihm = new IhmBlackjack(new Controleur(2));
+		IhmBlackjack ihm = new IhmBlackjack(new Controleur());
 	}
 }
