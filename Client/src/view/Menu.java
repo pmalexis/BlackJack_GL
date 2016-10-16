@@ -1,127 +1,167 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Menu extends JPanel implements MouseMotionListener, MouseListener {
+@SuppressWarnings("serial")
+public class Menu extends JPanel implements ActionListener, MouseListener {
 	
 	private IhmBlackjack ihm;
 	
-	private int x = 0;
-	private int y = 0;
+	//voir pour image jeton
+	private final JButton JETON_DROIT  = new JButton("");
+	private final JButton JETON_GAUCHE = new JButton("");
+	
+	private JButton start     = new JButton("START");
+	private JButton highscore = new JButton("HIGHSCORE");
+	private JButton option    = new JButton("OPTION");
+	private JButton credit    = new JButton("CREDIT");
+	private JButton close     = new JButton("CLOSE");
+	
+	private JButton[] tabButton = { start, highscore, option, credit, close };
 	
 	public Menu(IhmBlackjack ihm) {
+		setLayout(null);
 		this.ihm = ihm;
 		
-		addMouseMotionListener(this);
-		addMouseListener(this);
+		try {
+			JETON_DROIT.setIcon(new ImageIcon(ImageIO.read(new File("res/img/menu/jeton.png"))));
+			JETON_DROIT.setBorderPainted(false);
+		    JETON_DROIT.setBorder(null);
+		    
+			JETON_GAUCHE.setIcon(new ImageIcon(ImageIO.read(new File("res/img/menu/jeton.png"))));
+			JETON_GAUCHE.setBorderPainted(false);
+		    JETON_GAUCHE.setBorder(null);
+			
+			add(JETON_DROIT);
+			add(JETON_GAUCHE);
+		} catch (IOException e) {}
+		
+		for(JButton b : tabButton) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/" + b.getText() + ".png"));
+			    b.setIcon(new ImageIcon(img));
+			    b.setBorderPainted(false);
+			    b.setBorder(null);
+			    b.addMouseListener(this);
+			    b.addActionListener(this);
+			} catch (IOException ex) {}
+			add(b);
+		}
 	}
 	
 	public void paint(Graphics g) {
-		super.paintComponent(g);
-		g.setColor(Color.white);
 		try {
 			g.drawImage(ImageIO.read(new File("res/img/carpet.png")),0,0,this.getWidth(),this.getHeight(),null);
+			g.drawImage(ImageIO.read(new File("res/img/menu/cartes.png")), getWidth()/2 + getWidth()/6, getHeight()/4, getHeight()/2, getHeight()/2,null);
 		} catch (IOException e) { e.printStackTrace(); }
+		
+		g.setColor(Color.white);
 		g.setFont(new Font("Arial", Font.ITALIC, this.getWidth()/10));
 		g.drawString("BLACKJACK", this.getWidth()/5, this.getHeight()/5);
 
-		g.setFont(new Font("Arial", Font.PLAIN, getWidth()/20)); 
-		if(this.x >= getWidth()/3 + getWidth()/12 && this.x <= this.getWidth()/3 + getWidth()/4 
-		   && this.y <= getHeight()/3 && this.y >= getHeight()/3 - getHeight()/15) g.setColor(Color.yellow);
-		g.drawString("START", getWidth()/3 + getWidth()/12, getHeight()/3); g.setColor(Color.white);
-		
-		if(this.x >= getWidth()/3 && this.x <= getWidth()/3 + getWidth()/3
-		   && this.y <= getHeight()/2 - getHeight()/18 && this.y >= getHeight()/2 - getHeight()/8) g.setColor(Color.yellow);
-		g.drawString("HIGHTSCORE", getWidth()/3, getHeight()/2 - getHeight()/18); g.setColor(Color.white);
-		
-		if(this.x >= getWidth()/3 + getWidth()/14 && this.x <= getWidth()/3 + getWidth()/4 + getWidth()/100
-		   && this.y <= getHeight()/2 + getHeight()/18 && this.y >= getHeight()/2 - getHeight()/65) g.setColor(Color.yellow);
-		g.drawString("OPTION", getWidth()/3 + getWidth()/14, getHeight()/2 + getHeight()/18); g.setColor(Color.white);
-		
-		if(this.x >= getWidth()/3 + getWidth()/13 && this.x <= getWidth()/3 + getWidth()/4 + getWidth()/90
-		   && this.y <= getHeight()/2 + getHeight()/6 && this.y >= getHeight()/2 + getHeight()/10) g.setColor(Color.yellow);
-		g.drawString("CREDIT", getWidth()/3 + getWidth()/13, getHeight()/2 + getHeight()/6); g.setColor(Color.white);
-		
-		if(this.x >= getWidth()/3 + getWidth()/12 && this.x <= getWidth()/3 + getWidth()/4
-           && this.y <= getHeight()/2 + getHeight()/4 + getHeight()/30 && this.y >= getHeight()/2 + getHeight()/5 + getHeight()/50) g.setColor(Color.yellow);
-		g.drawString("CLOSE", getWidth()/3 + getWidth()/12, getHeight()/2 + getHeight()/4 + getHeight()/30); g.setColor(Color.white);
+		start.setBounds(getWidth()/3 + getWidth()/12, getHeight()/3, getWidth()/8,getHeight()/20);
+		highscore.setBounds(getWidth()/3 + getWidth()/20, getHeight()/3 + getHeight()/12, getWidth()/5,getHeight()/20);
+		option.setBounds(getWidth()/3 + getWidth()/12, getHeight()/2, getWidth()/8,getHeight()/20);
+		credit.setBounds(getWidth()/3 + getWidth()/12, getHeight()/2 + getHeight()/12, getWidth()/8,getHeight()/20);
+		close.setBounds(getWidth()/3 + getWidth()/12, getHeight()/2 + getHeight()/6, getWidth()/8,getHeight()/20);		
 		
 		g.setFont(new Font("Arial", Font.PLAIN, getWidth()/60));
 		g.drawString("Copyright © 2016 - UFR de Sciences - Universite Caen-Normandie", getWidth()/3 - getWidth()/15, getHeight() - getHeight()/50);
 	}
-
-	public void mouseMoved(MouseEvent e) {
-		this.x = e.getX();
-		this.y = e.getY();
-		
-		repaint();
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		
-		//START
-		if(this.x >= getWidth()/3 + getWidth()/12 && this.x <= this.getWidth()/3 + getWidth()/4 
-			       && this.y <= getHeight()/3 && this.y >= getHeight()/3 - getHeight()/15) {
-			System.out.println("Bientot bientot du calme ^^");
-		}
-		
-		//HIGHTSCORE
-		if(this.x >= getWidth()/3 && this.x <= getWidth()/3 + getWidth()/3
-			      && this.y <= getHeight()/2 - getHeight()/18 && this.y >= getHeight()/2 - getHeight()/8) {
-			System.out.println("coming soon");
-		}
-		
-		//OPTION
-		if(this.x >= getWidth()/3 + getWidth()/14 && this.x <= getWidth()/3 + getWidth()/4 + getWidth()/100
-			      && this.y <= getHeight()/2 + getHeight()/18 && this.y >= getHeight()/2 - getHeight()/65) {
-			System.out.println("chut tu l'auras mais avant la detente ok ;)");
-		}
-		
-		//CREDIT
-		if(this.x >= getWidth()/3 + getWidth()/13 && this.x <= getWidth()/3 + getWidth()/4 + getWidth()/90
-				&& this.y <= getHeight()/2 + getHeight()/6 && this.y >= getHeight()/2 + getHeight()/10) {
-			this.ihm.credit();
-		}
-		
-		//CLOSE
-		if(this.x >= getWidth()/3 + getWidth()/12 && this.x <= getWidth()/3 + getWidth()/4
-		   && this.y <= getHeight()/2 + getHeight()/4 + getHeight()/30 && this.y >= getHeight()/2 + getHeight()/5 + getHeight()/50) {
-			System.exit(0);
-		}
-	}
-
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mousePressed(MouseEvent e)  {}
-	public void mouseReleased(MouseEvent e) {}
-	public void mouseDragged(MouseEvent e)  {}
 	
-	public void update(Graphics g) {
-        Graphics offgc;
-        Image offscreen = null;
-        Dimension d = getSize();
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.start) this.ihm.start();
+		else if(e.getSource() == this.highscore) this.ihm.highscore();
+		else if(e.getSource() == this.option) this.ihm.option();
+		else if(e.getSource() == this.credit) this.ihm.credit();
+		else if(e.getSource() == this.close) System.exit(0);
+	}
 
-        offscreen = createImage(d.width, d.height);
-        offgc = offscreen.getGraphics();
-        offgc.setColor(getBackground());
-        offgc.fillRect(0, 0, d.width, d.height);
-        offgc.setColor(getForeground());
-        paint(offgc);
-        g.drawImage(offscreen, 0, 0, this);
-    }
+
+	
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() == this.start) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/START_BACK.png"));
+			    start.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.highscore) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/HIGHSCORE_BACK.png"));
+			    highscore.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.option) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/OPTION_BACK.png"));
+			    option.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.credit) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/CREDIT_BACK.png"));
+			    credit.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.close) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/CLOSE_BACK.png"));
+			    close.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+	}
+
+
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() == this.start) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/START.png"));
+			    start.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.highscore) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/HIGHSCORE.png"));
+			    highscore.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.option) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/OPTION.png"));
+			    option.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.credit) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/CREDIT.png"));
+			    credit.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+		else if(e.getSource() == this.close) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/CLOSE.png"));
+			    close.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+	}
+	
+	public void mouseClicked(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseDragged(MouseEvent e) {}
 }

@@ -1,41 +1,46 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Credit extends JPanel implements MouseMotionListener, MouseListener {
+@SuppressWarnings("serial")
+public class Credit extends JPanel implements ActionListener, MouseListener {
 
 	private IhmBlackjack ihm;
-	
-	private int x;
-	private int y;
 
+	private JButton retourMenu;
+	
 	private int nb;
 	
 	public Credit(IhmBlackjack ihm) {
+		setLayout(null);
 		this.ihm = ihm;
 		
-		this.x = -1;
-		this.y = -1;
+		retourMenu = new JButton("Retour menu");
+		try {
+		    Image img = ImageIO.read(new File("res/img/menu/retour_menu.png"));
+		    retourMenu.setIcon(new ImageIcon(img));
+		    retourMenu.setBorderPainted(false);
+		    retourMenu.setBorder(null);
+		    retourMenu.addMouseListener(this);
+		    retourMenu.addActionListener(this);
+		  } catch (IOException ex) {}
 		
-		JLabel l = new JLabel("grrr gr gregjreo gjejr");
-		add(l, BorderLayout.NORTH);
-		
-		
-		addMouseListener(this);
-		addMouseMotionListener(this);
+		add(retourMenu);
 	}
 	
 	public void paint(Graphics g) { 
@@ -43,43 +48,51 @@ public class Credit extends JPanel implements MouseMotionListener, MouseListener
 			g.drawImage(ImageIO.read(new File("res/img/carpet.png")),0,0,this.getWidth(),this.getHeight(),null);
 		} catch (IOException e) { e.printStackTrace(); }
 		
-		/*
 		g.setColor(Color.white);
-		g.setFont(new Font("Arial", Font.PLAIN, 100));
-		g.drawString("CREDIT", 320, 120);
+		g.setFont(new Font("Arial", Font.ITALIC, this.getWidth()/10));
+		g.drawString("CREDIT", this.getWidth()/4 + this.getWidth()/20, this.getHeight()/6);
 
-		g.setFont(new Font("Arial", Font.PLAIN, 20));
-		BufferedReader br = Fichier.getFichier("credit.txt");
-		String str = "";
-		nb = 160;
-		try {
-			while( (str = br.readLine()) != null ) {
-				g.drawString(str, 80, nb);
-				nb += 22;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		g.setFont(new Font("Arial", Font.PLAIN, this.getWidth()/70));
+		nb = 240;
+		ArrayList<String> al = Fichier.getLignes(Fichier.getFichier("credit.txt"));
+		for( String str : al ) {
+			g.drawString(str, getWidth()/4 + getWidth()/20, nb);
+			nb += this.getWidth()/70;
 		}
 		
-		nb += 44;
-		if(this.x >= 80 && this.x <= 120 && this.y >= nb - 20 && this.y <= nb) g.setColor(Color.yellow);
-		g.drawString("RETOUR MENU", 80, nb);
-		*/
+		retourMenu.setBounds(getWidth()/4 + getWidth()/20, nb, getWidth()/8,getHeight()/20);
+		
+		g.setColor(Color.white);
+		g.setFont(new Font("Arial", Font.PLAIN, getWidth()/60));
+		g.drawString("Copyright © 2016 - UFR de Sciences - Universite Caen-Normandie", getWidth()/3 - getWidth()/15, getHeight() - getHeight()/50);
 	}
 
-	public void mouseMoved(MouseEvent e) {
-		/*this.x = e.getX();
-		this.y = e.getY();
-		
-		if(this.x >= 70 && this.x <= 130 && this.y >= nb - 30 && this.y <= nb) repaint();*/
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.retourMenu) this.ihm.menu();
+	}
+
+
+	
+	public void mouseEntered(MouseEvent e) {
+		if(e.getSource() == this.retourMenu) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/retour_menu_hover.png"));
+			    retourMenu.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
+	}
+
+
+	public void mouseExited(MouseEvent e) {
+		if(e.getSource() == this.retourMenu) {
+			try {
+			    Image img = ImageIO.read(new File("res/img/menu/retour_menu.png"));
+			    retourMenu.setIcon(new ImageIcon(img));
+			  } catch (IOException ex) {}
+		}
 	}
 	
-	public void mouseClicked(MouseEvent e) {
-		this.ihm.menu();
-	}
-	
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {}
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseDragged(MouseEvent e) {}
