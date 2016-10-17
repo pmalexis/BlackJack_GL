@@ -78,7 +78,10 @@ public class Play implements Runnable {
                                     t.start();
                                     break;
 
-                            }		 
+                            }
+                            
+                            Server.sendAllPlayer();
+                            
                             cpt++;
                         }
 
@@ -93,6 +96,7 @@ public class Play implements Runnable {
                                 else {
                                     message = banquier.getHandString();
                                     message += player.getHandSplitString() + " => " + player.getValue(true);
+                                    
                                     t = new Thread(new SendToAll(message, null));
                                     t.start();
                                     message = player.getName() + " | hit (h) | stand (r) | ";

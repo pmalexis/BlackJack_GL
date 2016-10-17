@@ -13,12 +13,12 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Lock;
 import model.Player;
 
-public class Server {
+public class Server implements Runnable {
     
     static ArrayList<Client> allClient;
     static MoteurBlackjack mBJ;
     static int port;
-    final static int NB_MAX_CLIENT = 5;
+    public final static int NB_MAX_CLIENT = 5;
     final static int NB_CLIENT = 1;
    
     
@@ -29,12 +29,18 @@ public class Server {
 
     }
     
-	public static void main(String[] args) throws IOException {
+	public void run() {
 
         Server server = new Server(1234);
-		ServerSocket ss = new ServerSocket(1234);
+		ServerSocket ss = null;
+		try {
+			ss = new ServerSocket(1234);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
         
         Thread acceptConnexion = new Thread(new AcceptConnexion(ss, NB_MAX_CLIENT));
+        System.out.println("wait for client");
         acceptConnexion.start();
         
         mBJ.addPlayer(new Player("Banquier"));
@@ -121,7 +127,12 @@ public class Server {
     public static void sendToAll(String message, Socket currentSocket) {
         Thread sendToAll = new Thread(new SendToAll(message, currentSocket));
         sendToAll.start();
-    }        
+    }      
+    
+    public static void sendAllPlayer() {
+    	Thread sendObjectToAll = new Thread(new SendObjectToAll(mBJ.getPlayers(), null));
+    	sendObjectToAll.start();
+    }
     
     public static ArrayList<Client> getAllClient() {
         return allClient;

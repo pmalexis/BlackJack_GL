@@ -79,7 +79,7 @@ public class Option extends JPanel implements ActionListener, MouseListener {
 			listJoueurs.add(s.split("-")[0]);
 	}
 	
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		FontRenderContext context = g2.getFontRenderContext();
 		try {

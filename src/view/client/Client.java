@@ -35,6 +35,10 @@ public class Client {
             out.println(name);
             out.flush();
             
+            /* retrieve allPlayer */
+            Thread receptionPlayer = new Thread(new ReceptionPlayer(socket));
+            receptionPlayer.start();
+            
             Thread emission = new Thread(new Emission(out));
             Thread reception = new Thread(new Reception(in));
             emission.start();

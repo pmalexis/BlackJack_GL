@@ -1,8 +1,8 @@
 package server;
 import model.Player;
+
 import java.io.PrintWriter;
 import java.io.BufferedReader;
-
 import java.net.Socket;
 
 public class Client extends Player {
