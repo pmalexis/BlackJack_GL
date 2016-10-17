@@ -49,35 +49,42 @@ public class Menu extends JPanel implements ActionListener, MouseListener {
 			add(JETON_DROIT);
 			add(JETON_GAUCHE);
 		} catch (IOException e) {}
-		
-		for(JButton b : tabButton) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/" + b.getText() + ".png"));
-			    b.setIcon(new ImageIcon(img));
-			    b.setBorderPainted(false);
-			    b.setBorder(null);
-			    b.addMouseListener(this);
-			    b.addActionListener(this);
-			} catch (IOException ex) {}
-			add(b);
-		}
 	}
 	
 	public void paint(Graphics g) {
+		Image imgStart = null;
 		try {
 			g.drawImage(ImageIO.read(new File("res/img/carpet.png")),0,0,this.getWidth(),this.getHeight(),null);
 			g.drawImage(ImageIO.read(new File("res/img/menu/cartes.png")), getWidth()/2 + getWidth()/6, getHeight()/4, getHeight()/2, getHeight()/2,null);
+			imgStart = ImageIO.read(new File("res/img/menu/start.png"));
 		} catch (IOException e) { e.printStackTrace(); }
 		
 		g.setColor(Color.white);
 		g.setFont(new Font("Arial", Font.ITALIC, this.getWidth()/10));
 		g.drawString("BLACKJACK", this.getWidth()/5, this.getHeight()/5);
 
+		int nb =  getHeight()/3;
+		for(JButton b : tabButton) {
+			ImageIcon source = new ImageIcon("res/img/menu/" + b.getText() + ".png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+			b.setText("");
+			b.setIcon(resultat);
+			b.setBorderPainted(false);
+			b.setBorder(null);
+			b.addMouseListener(this);
+			b.addActionListener(this);
+			add(b);
+			b.setBounds(getWidth()/3 + getWidth()/12, nb, resultat.getIconWidth(), resultat.getIconHeight());
+			nb += 100;
+		}
+		
+		/*
 		start.setBounds(getWidth()/3 + getWidth()/12, getHeight()/3, getWidth()/8,getHeight()/20);
 		highscore.setBounds(getWidth()/3 + getWidth()/20, getHeight()/3 + getHeight()/12, getWidth()/5,getHeight()/20);
 		option.setBounds(getWidth()/3 + getWidth()/12, getHeight()/2, getWidth()/8,getHeight()/20);
 		credit.setBounds(getWidth()/3 + getWidth()/12, getHeight()/2 + getHeight()/12, getWidth()/8,getHeight()/20);
 		close.setBounds(getWidth()/3 + getWidth()/12, getHeight()/2 + getHeight()/6, getWidth()/8,getHeight()/20);		
+		*/
 		
 		g.setFont(new Font("Arial", Font.PLAIN, getWidth()/60));
 		g.drawString("Copyright © 2016 - UFR de Sciences - Universite Caen-Normandie", getWidth()/3 - getWidth()/15, getHeight() - getHeight()/50);
@@ -95,68 +102,58 @@ public class Menu extends JPanel implements ActionListener, MouseListener {
 	
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() == this.start) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/START_BACK.png"));
-			    start.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+		    ImageIcon source = new ImageIcon("res/img/menu/START_BACK.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    start.setIcon(resultat);
 		}
 		else if(e.getSource() == this.highscore) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/HIGHSCORE_BACK.png"));
-			    highscore.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/HIGHSCORE_BACK.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+			highscore.setIcon(resultat);
 		}
 		else if(e.getSource() == this.option) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/OPTION_BACK.png"));
-			    option.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/OPTION_BACK.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    option.setIcon(resultat);
 		}
 		else if(e.getSource() == this.credit) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/CREDIT_BACK.png"));
-			    credit.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/CREDIT_BACK.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    credit.setIcon(resultat);
 		}
 		else if(e.getSource() == this.close) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/CLOSE_BACK.png"));
-			    close.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/CLOSE_BACK.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    close.setIcon(resultat);
 		}
 	}
 
 
 	public void mouseExited(MouseEvent e) {
 		if(e.getSource() == this.start) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/START.png"));
-			    start.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+		    ImageIcon source = new ImageIcon("res/img/menu/START.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    start.setIcon(resultat);
 		}
 		else if(e.getSource() == this.highscore) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/HIGHSCORE.png"));
-			    highscore.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/HIGHSCORE.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+			highscore.setIcon(resultat);
 		}
 		else if(e.getSource() == this.option) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/OPTION.png"));
-			    option.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/OPTION.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    option.setIcon(resultat);
 		}
 		else if(e.getSource() == this.credit) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/CREDIT.png"));
-			    credit.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/CREDIT.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    credit.setIcon(resultat);
 		}
 		else if(e.getSource() == this.close) {
-			try {
-			    Image img = ImageIO.read(new File("res/img/menu/CLOSE.png"));
-			    close.setIcon(new ImageIcon(img));
-			  } catch (IOException ex) {}
+			ImageIcon source = new ImageIcon("res/img/menu/CLOSE.png");
+			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
+		    close.setIcon(resultat);
 		}
 	}
 	
