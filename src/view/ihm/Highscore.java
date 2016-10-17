@@ -68,7 +68,7 @@ public class Highscore extends JPanel implements ActionListener, MouseListener {
 
 			f = new Font("Arial", Font.PLAIN, this.getWidth()/60);
 			g.setFont(f);
-			nb = 320;
+			nb = getHeight()/3;
 			ArrayList<String> tempoAl = Fichier.getLignes(Fichier.getFichier("joueurs.txt"));
 			for(int j=0;j<=2;j++)
 				for(int i=0;i<tempoAl.size()-1;i++) {

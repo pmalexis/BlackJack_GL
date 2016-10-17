@@ -55,7 +55,7 @@ public class Credit extends JPanel implements ActionListener, MouseListener {
 		g.drawString("CREDIT", this.getWidth()/4 + this.getWidth()/20, this.getHeight()/6);
 
 		g.setFont(new Font("Arial", Font.PLAIN, this.getWidth()/70));
-		nb = 240;
+		nb = getHeight()/4;
 		ArrayList<String> al = Fichier.getLignes(Fichier.getFichier("credit.txt"));
 		for( String str : al ) {
 			g.drawString(str, getWidth()/4 + getWidth()/20, nb);
