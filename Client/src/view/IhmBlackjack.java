@@ -1,7 +1,8 @@
 package view;
 
 import java.awt.Cursor;
-
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 import controller.Controleur;
@@ -13,7 +14,10 @@ public class IhmBlackjack extends JFrame {
 		setTitle("BLACKJACK");
 		setLocation(100, 100);
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		setSize(1024, 768);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+		setSize(width, height);
 		
 		setUndecorated(true);
 		this.menu();
