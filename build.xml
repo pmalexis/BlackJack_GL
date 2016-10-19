@@ -1,62 +1,86 @@
-<?xml version="1.0"?>
-<project name="BlackJack_GL" basedir="." default="build">
-    <property name="src.dir" value="src/"/>
-    <property name="client.dir" value="src/view/"/>
-    <property name="server.dir" value="src/server"/>
-    <property name="name" value="BlackJack_GL"/>
+<project name="blackjack" default="run" basedir=".">
+    <property name="app.name" value="blackjack"/>
+    <property name="app.version" value="0.1"/>
+    <property name="app.fullname" value="${app.name}-${app.version}"/>
+    <property name="build.home" value="${basedir}/build"/>
+    <property name="dist.home" value="${basedir}/dist"/>
+    <property name="docs.home" value="${basedir}/docs"/>
+    <property name="src.home" value="${basedir}/src"/>
+    <property name="javac.version" value="1.8"/>
+    <property name="javac.encoding" value="UTF-8"/>
+    
+<!-- ==================== Compile options ===========================-->
+    <property name="compile.debug" value="true"/>
+    <property name="compile.deprecation" value="false"/>
+    <property name="compile.optimize" value="true"/>
 
-
-    <target name="compile" description="Compile source tree java files">
-      <!--<mkdir dir="${build.dir}"/>-->
-      <javac source="1.8" target="1.8">
-         <src path="${src.dir}"/>
-      </javac>
+<!-- ==================== All Target ======================================-->
+    <target name="all" depends="clean,compile" description="Clean build and dist directories, then compile"/>
+<!-- ==================== Clean Target ====================================-->
+    <target name="clean" description="Delete old build and dist directories">
+        <delete dir="${build.home}"/>
+        <delete dir="${dist.home}"/>
     </target>
     
-    <target name="compile.server" description="Compile source tree java files">
-      <!--<mkdir dir="${build.dir}"/>-->
-      <javac source="1.8" target="1.8">
-         <src path="${server.dir}"/>
-      </javac>
+<!-- ==================== Compile Target ==================================-->
+    <target name="compile" depends="prepare" description="Compile Java sources">
+        <javac srcdir="${src.home}" destdir="${build.home}" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="${javac.version}" encoding="${javac.encoding}"/>
+        <!-- Copy application resources -->
+        <copy todir="${build.home}">
+            <fileset dir="${src.home}" excludes="**/*.java"/>
+        </copy>
     </target>
     
-    <target name="compile.client" description="Compile source tree java files">
-      <!--<mkdir dir="${build.dir}"/>-->
-      <javac source="1.8" target="1.8">
-         <src path="${client.dir}"/>
-      </javac>
+<!-- ==================== Prepare Target ==================================-->
+    <target name="prepare">
+        <mkdir dir="${build.home}"/>
+        <mkdir dir="${dist.home}"/>
     </target>
 
-    <target name="clean" description="Clean output directories">
-      <delete>
-         <fileset dir="${src.dir}">
-            <include name="**/*.class"/>
-         </fileset>
-      </delete>
+<!-- ==================== Dist Target =====================================-->
+    <target name="dist" depends="clean,compile,javadoc" description="Create binary distribution">
+        <!-- Create application JAR file -->
+        <jar jarfile="${dist.home}/${app.fullname}.jar" basedir="${build.home}">
+            <manifest>
+                <attribute name="Main-Class" value="blackjack.MainClass"/>
+            </manifest>
+        </jar>
+
     </target>
     
+<!-- ==================== Run Target =====================================-->
     <target name="run.server">
-      <java fork="true" failonerror="yes" dir="${src.dir}" classname="server.Server">
+      <java fork="true" failonerror="yes" dir="${build.home}" classname="view.CLI">
          <arg line=""/>
       </java>
    </target>
     
     <target name="run.client">
-      <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.client.Client">
+      <java fork="true" failonerror="yes" dir="${build.home}" classname="view.client.Client">
          <arg line=""/>
       </java>
    </target>
     
     <target name="run.ihm">
-      <java fork="true" failonerror="yes" dir="${src.dir}" classname="view.Launcher">
+      <java fork="true" failonerror="yes" dir="${build.home}" classname="view.Launcher">
          <arg line=""/>
       </java>
    </target>
     
     <target name="run.testMoteur">
-      <java fork="true" failonerror="yes" dir="${src.dir}" classname="model.TestMoteur">
+      <java fork="true" failonerror="yes" dir="${build.home}" classname="model.TestMoteur">
          <arg line=""/>
       </java>
    </target>
+    
+<!-- ==================== Javadoc Target ==================================-->
+    <target name="javadoc" depends="compile" description="Create Javadoc API documentation">
+        <mkdir dir="${dist.home}/docs/api"/>
+    </target>
+    
+<!-- ==================== Run English ==================================-->
+    <target name="run-english" depends="dist">
+        <java jar="${dist.home}/${app.fullname}.jar" fork="true"><jvmarg value="-Duser.language=en"/></java>
+    </target>
 
 </project>
