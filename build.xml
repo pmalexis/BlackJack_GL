@@ -3,9 +3,11 @@
     <property name="app.version" value="0.1"/>
     <property name="app.fullname" value="${app.name}-${app.version}"/>
     <property name="build.home" value="${basedir}/build"/>
+    <property name="build.res.home" value="${basedir}/build/res"/>
     <property name="dist.home" value="${basedir}/dist"/>
     <property name="docs.home" value="${basedir}/docs"/>
     <property name="src.home" value="${basedir}/src"/>
+    <property name="res.home" value="${basedir}/res"/>
     <property name="javac.version" value="1.8"/>
     <property name="javac.encoding" value="UTF-8"/>
     
@@ -29,11 +31,15 @@
         <copy todir="${build.home}">
             <fileset dir="${src.home}" excludes="**/*.java"/>
         </copy>
+        <copy todir="${build.res.home}">
+            <fileset dir="${res.home}" excludes="**/*.java"/>
+        </copy>
     </target>
     
 <!-- ==================== Prepare Target ==================================-->
     <target name="prepare">
         <mkdir dir="${build.home}"/>
+        <mkdir dir="${build.res.home}"/>
         <mkdir dir="${dist.home}"/>
     </target>
 
