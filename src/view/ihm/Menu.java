@@ -23,6 +23,10 @@ public class Menu extends JPanel implements ActionListener, MouseListener {
 	
 	private Launcher ihm;
 	
+	//voir pour image jeton
+	private final JButton JETON_DROIT  = new JButton("");
+	private final JButton JETON_GAUCHE = new JButton("");
+	
 	private JButton start     = new JButton("START");
 	private JButton highscore = new JButton("HIGHSCORE");
 	private JButton option    = new JButton("OPTION");
@@ -34,13 +38,25 @@ public class Menu extends JPanel implements ActionListener, MouseListener {
 	public Menu(Launcher ihm) {
 		setLayout(null);
 		this.ihm = ihm;
+		
+		try {
+			JETON_DROIT.setIcon(new ImageIcon(ImageIO.read(new File("res/img/menu/jeton.png"))));
+			JETON_DROIT.setBorderPainted(false);
+		    JETON_DROIT.setBorder(null);
+		    
+			JETON_GAUCHE.setIcon(new ImageIcon(ImageIO.read(new File("res/img/menu/jeton.png"))));
+			JETON_GAUCHE.setBorderPainted(false);
+		    JETON_GAUCHE.setBorder(null);
+			
+			add(JETON_DROIT);
+			add(JETON_GAUCHE);
+		} catch (IOException e) {}
 	}
 	
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		try {
 			g.drawImage(ImageIO.read(new File("res/img/carpet.png")),0,0,this.getWidth(),this.getHeight(),null);
-			g.drawImage(ImageIO.read(new File("res/img/menu/cartes.png")), getWidth()/12, getHeight()/4, getHeight()/2, getHeight()/2,null);
-			g.drawImage(ImageIO.read(new File("res/img/menu/carte.png")), getWidth()/2 + getWidth()/6, getHeight()/3, getWidth()/7, getHeight()/3,null);
+			g.drawImage(ImageIO.read(new File("res/img/menu/cartes.png")), getWidth()/2 + getWidth()/6, getHeight()/4, getHeight()/2, getHeight()/2,null);
 		} catch (IOException e) { e.printStackTrace(); }
 		
 		g.setColor(Color.white);
@@ -48,6 +64,7 @@ public class Menu extends JPanel implements ActionListener, MouseListener {
 		g.drawString("BLACKJACK", this.getWidth()/5, this.getHeight()/5);
 
 		int nb =  getHeight()/3;
+		int cpt = 1;
 		for(JButton b : tabButton) {
 			ImageIcon source = new ImageIcon("res/img/menu/" + b.getText() + ".png");
 			ImageIcon resultat = new ImageIcon(source.getImage().getScaledInstance(250, 60, Image.SCALE_DEFAULT));
@@ -61,6 +78,7 @@ public class Menu extends JPanel implements ActionListener, MouseListener {
 			add(b);
 			b.setBounds(getWidth()/3 + getWidth()/12, nb, resultat.getIconWidth(), resultat.getIconHeight());
 			nb += getHeight()/10;
+			cpt++;
 		}
 		
 		g.setFont(new Font("Arial", Font.PLAIN, getWidth()/60));
