@@ -16,7 +16,12 @@ import view.ihm.Start;
 @SuppressWarnings("serial")
 public class Launcher extends JFrame {
 
-	public Launcher(Controleur crtl) {
+	private Controleur ctrl;
+	
+	public Launcher(Controleur ctrl) {
+		
+		this.ctrl = ctrl;
+		
 		setTitle("BLACKJACK");
 		setLocation(100, 100);
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -41,7 +46,7 @@ public class Launcher extends JFrame {
 	public void start() {
 		getContentPane().removeAll();
 		repaint();
-		add(new Start(this));
+		add(new Start(this, this.ctrl));
 		this.setVisible(true);
 	}
 	
@@ -68,6 +73,6 @@ public class Launcher extends JFrame {
 	
 	public static void main(String[] args) {
 		Launcher ihm = new Launcher(new Controleur());
-		ihm.setVisible(true); //bug avec linux ???
+		ihm.setVisible(true);
 	}
 }
