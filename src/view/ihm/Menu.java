@@ -16,12 +16,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import view.Launcher;
+import view.View;
 
 @SuppressWarnings("serial")
 public class Menu extends JPanel implements ActionListener, MouseListener {
 	
-	private Launcher ihm;
+	private View ihm;
 	
 	//voir pour image jeton
 	private final JButton JETON_DROIT  = new JButton("");
@@ -35,7 +35,7 @@ public class Menu extends JPanel implements ActionListener, MouseListener {
 	
 	private JButton[] tabButton = { start, highscore, option, credit, close };
 	
-	public Menu(Launcher ihm) {
+	public Menu(View ihm) {
 		setLayout(null);
 		this.ihm = ihm;
 		

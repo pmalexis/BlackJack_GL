@@ -21,18 +21,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import view.Launcher;
+import view.View;
 
 @SuppressWarnings("serial")
 public class Highscore extends JPanel implements ActionListener, MouseListener {
 
-		private Launcher ihm;
+		private View ihm;
 
 		private JButton retourMenu;
 		
 		private int nb;
 		
-		public Highscore(Launcher ihm) {
+		public Highscore(View ihm) {
 			setLayout(null);
 			this.ihm = ihm;
 			

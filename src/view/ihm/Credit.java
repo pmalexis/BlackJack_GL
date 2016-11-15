@@ -17,18 +17,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import view.Launcher;
+import view.View;
 
 @SuppressWarnings("serial")
 public class Credit extends JPanel implements ActionListener, MouseListener {
 
-	private Launcher ihm;
+	private View ihm;
 
 	private JButton retourMenu;
 	
 	private int nb;
 	
-	public Credit(Launcher ihm) {
+	public Credit(View ihm) {
 		setLayout(null);
 		this.ihm = ihm;
 		

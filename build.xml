@@ -55,26 +55,8 @@
     </target>
     
 <!-- ==================== Run Target =====================================-->
-    <target name="run.server">
-      <java fork="true" failonerror="yes" dir="${build.home}" classname="view.CLI">
-         <arg line=""/>
-      </java>
-   </target>
-    
-    <target name="run.client">
-      <java fork="true" failonerror="yes" dir="${build.home}" classname="view.client.Client">
-         <arg line=""/>
-      </java>
-   </target>
-    
-    <target name="run.ihm">
-      <java fork="true" failonerror="yes" dir="${build.home}" classname="view.Launcher">
-         <arg line=""/>
-      </java>
-   </target>
-    
-    <target name="run.testMoteur">
-      <java fork="true" failonerror="yes" dir="${build.home}" classname="model.TestMoteur">
+    <target name="run">
+      <java fork="true" failonerror="yes" dir="${build.home}" classname="Launcher">
          <arg line=""/>
       </java>
    </target>

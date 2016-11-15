@@ -1,13 +1,15 @@
 package model;
 
 import java.util.ArrayList;
-import java.lang.NullPointerException;
+import java.util.Observable;
 
 import model.cards.Carte;
 import model.cards.Couleur;
 import model.cards.Paquet;
 
-public class MoteurBlackjack {
+
+
+public class MoteurBlackjack extends Observable{
 
 	private final int NB_CARDS_BY_HANDS_START = 2;
 	private final int NB_PLAYERS_MAX = 5;
@@ -224,7 +226,7 @@ public class MoteurBlackjack {
 		if(player.getMoney() >= n) {
 			player.setBet(n + player.getBet());
 			player.setMoney(player.getMoney() - n);
-			
+			notifyObservers();
 			return false;
 		}
 		

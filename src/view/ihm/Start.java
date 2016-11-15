@@ -21,16 +21,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import server.Server;
-import view.Launcher;
-import view.client.Emission;
-import view.client.Reception;
-import view.client.ReceptionPlayer;
+import view.View;
 
 @SuppressWarnings("serial")
 public class Start extends JPanel implements ActionListener, MouseListener {
 
-	private Launcher ihm;
+	private View ihm;
 	
 	private JButton select;
 	private JButton skip;
@@ -41,10 +37,7 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 
 	private Socket socket;
 	
-	public Start(Launcher ihm) {
-		
-		Thread server = new Thread(new Server(1234));
-		server.start();
+	public Start(View ihm) {
 		
 		this.ihm = ihm;
 		
@@ -95,47 +88,21 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(!first_step) {
-			try {
-				System.out.println("toto");
-				socket = new Socket("localhost", 1234);
-				System.out.println("tata");
-	            PrintWriter out = new PrintWriter(socket.getOutputStream());
-	            System.out.println("tato");
-	            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	            System.out.println("tota");
-				String name = "";
-	            
-	            if(e.getSource() == this.select) {
-					if(this.listJoueurs.getSelectedIndex() > 0)
-						name = this.listJoueurs.getSelectedItem();
-				}
-				else if(e.getSource() == this.skip) 
-					name = "Joueur";
-			
-	            if(name.length() != 0) {
-					/* send client name */
-			        out.println(name);
-			        out.flush();
-			        
-			        /* retrieve allPlayer */
-		            Thread receptionPlayer = new Thread(new ReceptionPlayer(socket));
-		            receptionPlayer.start();
-			        
-			        Thread emission = new Thread(new Emission(out));
-			        Thread reception = new Thread(new Reception(in));
-			        emission.start();
-			        reception.start();
-			        
-			        
-			        first_step = true;
-			        removeAll();
-			        repaint();
-	            }
-			} catch (IOException ev) {
-	            System.err.println("cafe " + ev);
-	        }
-		}
+			String name = "";
+	        if(e.getSource() == this.select) {
+				if(this.listJoueurs.getSelectedIndex() > 0)
+					name = this.listJoueurs.getSelectedItem();
+			}
+			else if(e.getSource() == this.skip){
+				name = "Joueur";
+			}
+	 
+	        first_step = true;
+	        removeAll();
+	        repaint();
+        }
 	}
+	
 	
 	public void mouseClicked(MouseEvent e) {}
 	

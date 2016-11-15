@@ -24,12 +24,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import view.Launcher;
+import view.View;
 
 @SuppressWarnings("serial")
 public class Option extends JPanel implements ActionListener, MouseListener {
 
-	private Launcher ihm;
+	private View ihm;
 	
 	private JButton ajout;
 	private JButton suppr;
@@ -39,7 +39,7 @@ public class Option extends JPanel implements ActionListener, MouseListener {
 	
 	private List listJoueurs;
 	
-	public Option(Launcher ihm) {
+	public Option(View ihm) {
 		setLayout(null);
 		this.ihm = ihm;
 		
