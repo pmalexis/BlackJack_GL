@@ -16,6 +16,7 @@ public class Player {
 	private int betSplit;
 	
 	private int money;
+	
 	private int insurance;
 	private int insuranceSplit;
 	

@@ -5,7 +5,7 @@ import model.MoteurBlackjack;
 public class BotAgressif extends Bot {
 	
 	public BotAgressif() {
-		super("BotAtk");
+		super("bot_atk");
 	}
 
 	public void bet(MoteurBlackjack moteur) {

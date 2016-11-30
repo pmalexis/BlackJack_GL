@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import controleur.Controleur;
 import model.Player;
 import model.bot.Bot;
+import model.bot.BotAgressif;
 import model.cards.Carte;
 import model.cards.Couleur;
 import model.cards.Paquet;
@@ -54,6 +55,34 @@ public class Visu extends JPanel implements ActionListener {
         this.parier.setEnabled(false);
         
         this.chargerImage();
+        
+        //PARTIE BOT
+  		try {
+  			Bot test = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
+  			if(test != null) {
+  				Thread t = new Thread() {
+  					public void run() {
+  						try {
+  				            
+  				            if(test.getBet() == 0) {
+  				            	Thread.sleep(2000);
+  				            	test.bet(ctrl.getMoteur());
+  				            	Thread.sleep(2000);
+  				            	launchGame();
+  				            }
+  				            
+  				            while(!test.getTurnDown()) {
+  				            	Thread.sleep(2000);
+  				            	test.play(ctrl.getMoteur());	
+  				            }
+  				            
+  				        }  catch (InterruptedException e) {}
+  					}
+  				};
+  				t.start();
+  			}
+  		}
+  		catch(Exception e) {}
 	}
 	
 	public void chargerImage() {
@@ -121,21 +150,15 @@ public class Visu extends JPanel implements ActionListener {
 				test = this.ctrl.getThisPlayer(Start.identifiant).getHand();
 				cpt = 0;
 				for(Carte c : test.getAlCard()) {
-					//System.out.println(c.getCouleur() + "_" + c.getHauteur());
-					try {
-						g.drawImage(ImageIO.read(new File("res/img/cards/"+c.getCouleur() + "_" + c.getHauteur()+".png")), getWidth()/2-getWidth()/7 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
-						cpt += getWidth()/50;
-					} catch (IOException e) { e.printStackTrace(); }
+					g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2-getWidth()/7 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
+					cpt += getWidth()/50;
 				}
 				
 				test = this.ctrl.getThisPlayer(Start.identifiant).getSplit();
 				cpt = 0;
 				for(Carte c : test.getAlCard()) {
-					//System.out.println(c.getCouleur() + "_" + c.getHauteur());
-					try {
-						g.drawImage(ImageIO.read(new File("res/img/cards/"+c.getCouleur() + "_" + c.getHauteur()+".png")), getWidth()/2 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
-						cpt += getWidth()/50;
-					} catch (IOException e) { e.printStackTrace(); }
+					g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
+					cpt += getWidth()/50;
 				}
 				betWidth = getWidth()/2-getWidth()/16;
 				this.bet.setText(this.ctrl.getThisPlayer(Start.identifiant).getBet() + " | " + this.ctrl.getThisPlayer(Start.identifiant).getBetSplit());
@@ -147,11 +170,8 @@ public class Visu extends JPanel implements ActionListener {
 				test = this.ctrl.getThisPlayer(Start.identifiant).getHand();
 				cpt = 0;
 				for(Carte c : test.getAlCard()) {
-					//System.out.println(c.getCouleur() + "_" + c.getHauteur());
-					try {
-						g.drawImage(ImageIO.read(new File("res/img/cards/"+c.getCouleur() + "_" + c.getHauteur()+".png")), getWidth()/2-getWidth()/15 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
-						cpt += getWidth()/50;
-					} catch (IOException e) { e.printStackTrace(); }
+					g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2-getWidth()/15 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
+					cpt += getWidth()/50;
 				}
 				this.bet.setText(""+this.ctrl.getThisPlayer(Start.identifiant).getBet());
 			}
@@ -161,9 +181,6 @@ public class Visu extends JPanel implements ActionListener {
 		this.bet.setFont(new Font("Arial", Font.ITALIC, this.getWidth()/40));
 		this.bet.setBounds(betWidth,getHeight()-getHeight()/11,1000,this.getWidth()/20);
 		
-		//PARTIE BOT
-		
-		
 		//PARTIE AFFICHAGE RESULTAT
 		boolean fini = true;
 		int cpt = 0;
@@ -171,8 +188,6 @@ public class Visu extends JPanel implements ActionListener {
 			if(cpt != 0)
 				if(!p.getTurnDown()) fini = false;
 			cpt++;
-			
-			System.out.println("test " + cpt);
 		}
 		
 		if(fini) {
@@ -207,13 +222,17 @@ public class Visu extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.parier) {
-			this.ctrl.distribution();
-			this.pari = true;
-			this.parier.setEnabled(false);
-			this.start.startDrawButton();
-			
-			revalidate();
-	        repaint();
+			this.launchGame();
 		}
+	}
+	
+	public void launchGame() {
+		this.ctrl.distribution();
+		this.pari = true;
+		this.parier.setEnabled(false);
+		this.start.startDrawButton();
+		
+		revalidate();
+        repaint();
 	}
 }

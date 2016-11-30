@@ -12,8 +12,4 @@ public abstract class Bot extends Player {
 	public abstract void bet(MoteurBlackjack moteur);
 	
 	public abstract void play(MoteurBlackjack moteur);
-	
-	public boolean isBot() {
-		return true;
-	}
 }

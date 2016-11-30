@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import controleur.Controleur;
 import model.Player;
+import model.bot.Bot;
 
 public class DrawButton extends JPanel implements ActionListener {
 
@@ -64,6 +65,17 @@ public class DrawButton extends JPanel implements ActionListener {
 			
 			this.ctrl.setTurnDown(player, true);
 		}
+		
+		try {
+			Bot test = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
+			
+			this.hit.setEnabled(false);
+			this.stand.setEnabled(false);
+			this.doubles.setEnabled(false);
+			this.split.setEnabled(false);
+			this.insurance.setEnabled(false);
+		}
+		catch (Exception ex) {}
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -93,74 +105,77 @@ public class DrawButton extends JPanel implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		
-		boolean hit, stand, doubles, split, insurance, isSplit;
-		hit = stand = doubles = split = insurance = isSplit = false;
-		
-		int cpt = 0;
-		Player player = ctrl.getThisPlayer(Start.identifiant);
-		
-		if(e.getSource() == this.hit) { //PIOCHE NORMALE
-			this.ctrl.hit(player, this.isSplit);
-			cpt++;
+		try {
+			Bot test = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
 		}
-		else if(e.getSource() == this.stand) { //S ARRETE
-			if(player.getBetSplit() == 0 || this.isSplit) {
-				this.ctrl.setTurnDown(player, true);
+		catch (Exception ex) {
+			boolean hit, stand, doubles, split, insurance, isSplit;
+			hit = stand = doubles = split = insurance = isSplit = false;
+			
+			int cpt = 0;
+			Player player = ctrl.getThisPlayer(Start.identifiant);
+			
+			if(e.getSource() == this.hit) { //PIOCHE NORMALE
+				this.ctrl.hit(player, this.isSplit);
 				cpt++;
 			}
-			else isSplit = true;
-			
-			//System.out.println(player.getTurnDown());
-		} 
-		else if(e.getSource() == this.doubles) { //PIOCHE + DOUBLER LA MISE
-			this.ctrl.hit(player, this.isSplit); 
-			this.ctrl.addBetTable(player, this.isSplit, 2);
-			cpt++;
-			if(player.getBetSplit() == 0 || this.isSplit)
-				this.ctrl.setTurnDown(player, true);
-			else isSplit = true;
-		}
-		else if(e.getSource() == this.split) { //DIVISER SA MAIN
-			this.ctrl.split(player);
-			split = true;
-		}
-		else if(e.getSource() == this.insurance) { //ASSURANCE
-			insurance = true;
-			this.ctrl.insurance(player, this.isSplit);
-		}
-		
-		if(cpt >= 1) doubles = true;
-		if(player.computeValue(this.isSplit) >= 21 || isSplit) {
-			hit = true;
-			stand = true;
-			doubles = true;
-			split = true;
-			insurance = true;
-			
-			if(player.getBetSplit() == 0 || this.isSplit)
-				this.ctrl.setTurnDown(player, true);
-			else {
-				hit       = false;
-				stand     = false;
-				split     = true;
-				
-				if(player.getMoney() >= player.getBetSplit()) 
-					doubles = false;
-				
-				if(ctrl.getThisPlayer(0).getHand().getAlCard().get(0).getHauteur() == 1) {
-					insurance = false;
-					this.insurance.setEnabled(true);
+			else if(e.getSource() == this.stand) { //S ARRETE
+				if(player.getBetSplit() == 0 || this.isSplit) {
+					this.ctrl.setTurnDown(player, true);
+					cpt++;
 				}
-					
-				this.isSplit = true;
+				else isSplit = true;
+			} 
+			else if(e.getSource() == this.doubles) { //PIOCHE + DOUBLER LA MISE
+				this.ctrl.hit(player, this.isSplit); 
+				this.ctrl.addBetTable(player, this.isSplit, 2);
+				cpt++;
+				if(player.getBetSplit() == 0 || this.isSplit)
+					this.ctrl.setTurnDown(player, true);
+				else isSplit = true;
 			}
+			else if(e.getSource() == this.split) { //DIVISER SA MAIN
+				this.ctrl.split(player);
+				split = true;
+			}
+			else if(e.getSource() == this.insurance) { //ASSURANCE
+				insurance = true;
+				this.ctrl.insurance(player, this.isSplit);
+			}
+			
+			if(cpt >= 1) doubles = true;
+			if(player.computeValue(this.isSplit) >= 21 || isSplit) {
+				hit = true;
+				stand = true;
+				doubles = true;
+				split = true;
+				insurance = true;
+				
+				if(player.getBetSplit() == 0 || this.isSplit)
+					this.ctrl.setTurnDown(player, true);
+				else {
+					hit       = false;
+					stand     = false;
+					split     = true;
+					
+					if(player.getMoney() >= player.getBetSplit()) 
+						doubles = false;
+					
+					if(ctrl.getThisPlayer(0).getHand().getAlCard().get(0).getHauteur() == 1) {
+						insurance = false;
+						this.insurance.setEnabled(true);
+					}
+						
+					this.isSplit = true;
+				}
+			}
+			
+			//passer les boutons a false
+			if(hit)       this.hit.setEnabled(false);
+			if(stand)     this.stand.setEnabled(false);
+			if(doubles)   this.doubles.setEnabled(false);
+			if(split)     this.split.setEnabled(false);
+			if(insurance) this.insurance.setEnabled(false);
 		}
-		
-		//passer les boutons a false
-		if(hit)       this.hit.setEnabled(false);
-		if(stand)     this.stand.setEnabled(false);
-		if(doubles)   this.doubles.setEnabled(false);
-		if(split)     this.split.setEnabled(false);
-		if(insurance) this.insurance.setEnabled(false);
 	}
 }

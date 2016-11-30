@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import model.Player;
+import model.bot.Bot;
 import controleur.Controleur;
 
 @SuppressWarnings("serial")
@@ -67,22 +68,27 @@ public class DrawToken extends JPanel implements MouseListener {
 
 	public void mouseClicked(MouseEvent e) {
 		
-		Jeton[] tabJeton = Jeton.values();
-		int[] tabNbJeton = this.getNbToken();
-		int i = 0;
-		int cpt = getWidth()/9;
-		for(Jeton j : tabJeton) {
-			if(e.getX() >= cpt && e.getX() <= cpt + getWidth()/23) {
-				if(tabNbJeton[i] > 0) {
-					this.ctrl.setBetTable(this.ctrl.getThisPlayer(Start.identifiant), j.getValeur());
-					this.start.getVisu().setText(this.ctrl.getThisPlayer(Start.identifiant).getBet());
-				}
-			}
-			cpt += getWidth()/15;
-			i++;
+		try {
+			Bot test = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
 		}
-		revalidate();
-		repaint();
+		catch (Exception ex) {
+			Jeton[] tabJeton = Jeton.values();
+			int[] tabNbJeton = this.getNbToken();
+			int i = 0;
+			int cpt = getWidth()/9;
+			for(Jeton j : tabJeton) {
+				if(e.getX() >= cpt && e.getX() <= cpt + getWidth()/23) {
+					if(tabNbJeton[i] > 0) {
+						this.ctrl.setBetTable(this.ctrl.getThisPlayer(Start.identifiant), j.getValeur());
+						this.start.getVisu().setText(this.ctrl.getThisPlayer(Start.identifiant).getBet());
+					}
+				}
+				cpt += getWidth()/15;
+				i++;
+			}
+			revalidate();
+			repaint();
+		}
 	}
 
 	public void mouseEntered(MouseEvent e) {}

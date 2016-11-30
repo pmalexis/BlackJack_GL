@@ -94,8 +94,7 @@ public class DrawScore extends JPanel implements ActionListener {
 					this.message.setText(this.message.getText() + "VOUS AVEZ FAIT PLUS DE 21, VOUS AVEZ PERDU");
 					this.ctrl.resetBetTable(player);
 				}
-			}	
-			//if(split) i--;
+			}
 		}
 		
 		this.message.setText(this.message.getText() + ", ENCORE ? ");

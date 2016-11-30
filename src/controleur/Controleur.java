@@ -90,7 +90,7 @@ public class Controleur {
 	}
 
 	public void addBot(String name) {
-		Player player = null;
+		Player player;
 		if(name.equals("atk")) player = new BotAgressif();
 		else player = new BotDefensif();
 		

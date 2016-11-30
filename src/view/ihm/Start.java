@@ -123,12 +123,10 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 			else if(e.getSource() == this.skip) 
 				name = "Joueur";
 			else if(e.getSource() == botAtk) {
-				this.ctrl.addBot("atk");
-				name = "bot";
+				name = "bot_atk";
 	   		}
 	   		else if(e.getSource() == botDef) {
-	   			this.ctrl.addBot("def");
-	   			name = "bot";
+	   			name = "bot_def";
 	   		}
 		
             this.initVisu(name);
@@ -136,10 +134,13 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 	}
 	
 	public void initVisu(String name) {
-		int money = Fichier.getMoney(name);
-        
-		if(!name.equals("bot"))
+		
+		if(name.split("_")[0].equals("bot"))
+			this.ctrl.addBot(name.split("_")[1]);
+		else {
+			int money = Fichier.getMoney(name);
 			this.ctrl.addPlayer(name, money);
+		}
         
         //On ajoute un JPanel pour l'utiliser avec miser (pour afficher les jetons)
         //et avec partieEnCour pour afficher les boutons d action
