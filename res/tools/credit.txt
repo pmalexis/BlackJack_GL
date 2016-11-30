@@ -1,9 +1,9 @@
-Création d'un Blackjack (MVC) avec une IA - projet L3 Info
+﻿Création d'un Blackjack (MVC) avec une IA - projet L3 Info
 
-- Alexis
-- Guillaume
-- Lucas
-- Nicolas
+- Alexis Prevost-Maynen - 21511372
+- Guillaume Drouart - 21009341
+- Lucas Gouédard - 21506676
+- Nicolas Vatel - 21410740
 
 Sujet du projet de Génie Logiciel :
 
