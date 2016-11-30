@@ -10,12 +10,12 @@ Ant - build.xml
 
 Le projet fonctionne via Ant. Ce dernier est basé sur le build.xml utilisé en cours.
 Voici les target à lancer pour pouvoir tester le projet :
-$ ant compile
-$ ant run-dist
+- ant compile
+- ant run-dist
 Pour finir voici les targets à lancer pour effectuer les tests et générer les rapports :
-$ ant compile-test
-$ ant junit
-$ ant junitreport
+- ant compile-test
+- ant junit
+- ant junitreport
 
 
 Comment fonctionnent les bots ?
