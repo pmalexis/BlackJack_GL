@@ -2,8 +2,6 @@ package controleur;
 
 import java.util.ArrayList;
 
-import javax.swing.text.View;
-
 import model.MoteurBlackjack;
 import model.Player;
 import model.bot.BotAgressif;
@@ -25,20 +23,16 @@ public class Controleur {
 		this.moteur.addPlayer(new Player(name, money));
 	}
 	
-	public ArrayList<Player> getPlayers() {
-		return this.moteur.getPlayers();
+	public void addBetTable(Player player, boolean split, int x) {
+		this.moteur.addBetTable(player, split, x);
 	}
 	
-	public MoteurBlackjack getMoteur() {
-		return this.moteur;
-	}
-
-	public Player getThisPlayer(int pos) {
-		return this.getPlayers().get(pos);
-	}
-
-	public void setBetTable(Player player, int bet) {
-		this.moteur.setBetTable(player, bet);
+	public void addBot(String name) {
+		Player player;
+		if(name.equals("atk")) player = new BotAgressif();
+		else player = new BotDefensif();
+		
+		this.moteur.addPlayer(player);
 	}
 	
 	public void distribution() {
@@ -47,10 +41,6 @@ public class Controleur {
 
 	public void hit(Player player, boolean split) {
 		this.moteur.hit(player, split);
-	}
-
-	public void setTurnDown(Player player, boolean turnDown) {
-		player.setTurnDown(turnDown);
 	}
 
 	public boolean canSplit(Player player) {
@@ -73,10 +63,6 @@ public class Controleur {
 		this.moteur.resetBetTable(player);
 	}
 
-	public void addBetTable(Player player, boolean split, int x) {
-		this.moteur.addBetTable(player, split, x);
-	}
-
 	public void init() {
 		this.moteur.initAll();
 	}
@@ -88,12 +74,24 @@ public class Controleur {
 	public void distributeBets() {
 		this.moteur.distributeBets();
 	}
+	
+	public void setBetTable(Player player, int bet) {
+		this.moteur.setBetTable(player, bet);
+	}
+	
+	public void setTurnDown(Player player, boolean turnDown) {
+		player.setTurnDown(turnDown);
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		return this.moteur.getPlayers();
+	}
+	
+	public MoteurBlackjack getMoteur() {
+		return this.moteur;
+	}
 
-	public void addBot(String name) {
-		Player player;
-		if(name.equals("atk")) player = new BotAgressif();
-		else player = new BotDefensif();
-		
-		this.moteur.addPlayer(player);
+	public Player getThisPlayer(int pos) {
+		return this.getPlayers().get(pos);
 	}
 }

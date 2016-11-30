@@ -42,6 +42,28 @@ public class Player {
 		this.handSplit = new Paquet(); 
     }
 	
+    public int computeValue(boolean split) {
+		int n  = 0;
+		int as = 0;
+		
+		ArrayList<Carte> alTempo;
+		if(split) alTempo = this.handSplit.getAlCard();
+		else alTempo = this.hand.getAlCard();
+		
+		for(int i=0;i<alTempo.size();i++) {
+			if(alTempo.get(i).getHauteur() == 1) as++;
+			else n += (alTempo.get(i).getHauteur()>10?10:alTempo.get(i).getHauteur());
+		}
+		
+		for(int j=1;j<=as;j++)
+			if(n + 11 <= 21) {
+				if(as >= 2 && alTempo.size() > 2 && j > 1) n++;
+				else n += 11;
+			}
+			else n++;
+		
+		return n;
+	}
 	
 	/* --------------------------- *
 	 *   GET - return the values
@@ -73,28 +95,13 @@ public class Player {
 	public int getInsurance() {
 		return this.insurance;
 	}
+	
+	public boolean getTurnDown() {
+		return turnDown;
+	}
 
-	public int computeValue(boolean split) {
-		int n  = 0;
-		int as = 0;
-		
-		ArrayList<Carte> alTempo;
-		if(split) alTempo = this.handSplit.getAlCard();
-		else alTempo = this.hand.getAlCard();
-		
-		for(int i=0;i<alTempo.size();i++) {
-			if(alTempo.get(i).getHauteur() == 1) as++;
-			else n += (alTempo.get(i).getHauteur()>10?10:alTempo.get(i).getHauteur());
-		}
-		
-		for(int j=1;j<=as;j++)
-			if(n + 11 <= 21) {
-				if(as >= 2 && alTempo.size() > 2 && j > 1) n++;
-				else n += 11;
-			}
-			else n++;
-		
-		return n;
+	public int getInsuranceSplit() {
+		return this.insuranceSplit;
 	}
 	
 	/* --------------------------- *
@@ -124,36 +131,7 @@ public class Player {
 		this.name = s;
 	}
 	
-	/* STRING */
-	public String getHandString() {
-		String s = "";
-		s += this.name + " : ";
-		
-		for(int j=0;j<this.hand.getAlCard().size();j++)
-			s += (this.name.equals("Banquier") && j > 0 ? "--------- | " : this.hand.getAlCard().get(j) + " | " ) ;
-		
-		return s;
-	}
-	
-	public String getHandSplitString() {
-		String s = "";
-		s += this.name + " BIS : ";
-		
-		for(int j=0;j<this.handSplit.getAlCard().size();j++)
-			s += this.handSplit.getAlCard().get(j) + " | ";
-		
-		return s;
-	}
-
-	public boolean getTurnDown() {
-		return turnDown;
-	}
-
 	public void setTurnDown(boolean turnDown) {
 		this.turnDown = turnDown;
-	}
-
-	public int getInsuranceSplit() {
-		return this.insuranceSplit;
 	}
 }

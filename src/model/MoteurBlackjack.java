@@ -47,10 +47,10 @@ public class MoteurBlackjack extends Observable{
 		this.paquet = new Paquet();
 		Couleur[] tabCouleur = {Couleur.Pique, Couleur.Trefle, Couleur.Carreau, Couleur.Coeur};
 		
-		for(int nb_pack=0;nb_pack<1;nb_pack++) { //nb pack
+		for(int nb_pack=0;nb_pack<5;nb_pack++) { //nb pack
 			for(int i=0;i<4;i++) {// 4 colors
 				for(int j=1;j<14;j++) { // 13 cards
-					this.paquet.addTop(new Carte(j, tabCouleur[i])); //IZEHPBGZGEZUJBFIPUGGB
+					this.paquet.addTop(new Carte(j, tabCouleur[i])); 
 				}
             }
         }
@@ -70,6 +70,14 @@ public class MoteurBlackjack extends Observable{
 			}
 		
 		return true;
+	}
+	
+	
+	public void distributeBets() {
+		for(int i=1;i<this.tabPlayers.size();i++) {
+			Player p = this.tabPlayers.get(i);
+			p.setMoney(p.getMoney() + p.getBet() + p.getBetSplit());
+		}
 	}
 	
 	/*
@@ -227,12 +235,5 @@ public class MoteurBlackjack extends Observable{
 		}
 		
 		return false;
-	}
-	
-	public void distributeBets() {
-		for(int i=1;i<this.tabPlayers.size();i++) {
-			Player p = this.tabPlayers.get(i);
-			p.setMoney(p.getMoney() + p.getBet() + p.getBetSplit());
-		}
 	}
 }

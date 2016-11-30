@@ -11,7 +11,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import model.Player;
 import model.bot.Bot;
 import controleur.Controleur;
 
@@ -69,7 +68,7 @@ public class DrawToken extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		
 		try {
-			Bot test = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
+			Bot bot = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
 		}
 		catch (Exception ex) {
 			Jeton[] tabJeton = Jeton.values();

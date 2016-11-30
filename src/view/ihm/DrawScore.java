@@ -14,6 +14,7 @@ import controleur.Controleur;
 import model.Player;
 import view.View;
 
+@SuppressWarnings("serial")
 public class DrawScore extends JPanel implements ActionListener {
 
 	private Controleur ctrl;
@@ -87,9 +88,7 @@ public class DrawScore extends JPanel implements ActionListener {
 						else {
 							this.message.setText(this.message.getText() + "EGALITE POUR VOUS ET LA BANQUE");
 						}
-						//this.message.setText("BANQUE => " + this.ctrl.getPlayers().get(0).getValue(false) + "\nJOUEUR " + (split?"BIS ":"") + player.getName() + " => " + player.getValue(split) + "\n");
 					}
-					//this.message.setText(this.message.getText() + ", VOUS " + player.computeValue(split) + " | BANQUIER " + this.ctrl.getPlayers().get(0).computeValue(false));
 				} else {
 					this.message.setText(this.message.getText() + "VOUS AVEZ FAIT PLUS DE 21, VOUS AVEZ PERDU");
 					this.ctrl.resetBetTable(player);
@@ -113,8 +112,15 @@ public class DrawScore extends JPanel implements ActionListener {
 		if(e.getSource() == this.again) {
 			this.ctrl.distributeBets();
 			Fichier.setMoney(player.getName(), player.getMoney());
+			String[] tabNameBot = new String[this.ctrl.getPlayers().size()-2];
+			if(tabNameBot.length > 0) tabNameBot[0] = this.ctrl.getThisPlayer(2).getName();
+			if(tabNameBot.length > 1) tabNameBot[1] = this.ctrl.getThisPlayer(3).getName();
 			this.ctrl.init();
 			this.view.start(player.getName());
+			
+			for(int i=0
+					;i<tabNameBot.length;i++)
+				this.ctrl.addBot(tabNameBot[i].split("_")[1]);
 		}
 		else if(e.getSource() == this.stop) {
 			this.ctrl.distributeBets();

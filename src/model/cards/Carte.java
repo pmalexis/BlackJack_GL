@@ -14,17 +14,6 @@ public class Carte {
 	}
 	
 	/* --------------------------- *
-	 *   SET - change the values
-	 * --------------------------- */
-	public void setHauteur(int h) {
-		this.hauteur = h;
-	}
-	
-	public void setCouleur(Couleur c) {
-		this.couleur = c;
-	}
-	
-	/* --------------------------- *
 	 *   GET - return the values
 	 * --------------------------- */
 	public int getHauteur() {
@@ -33,12 +22,5 @@ public class Carte {
 	
 	public Couleur getCouleur() {
 		return this.couleur;
-	}
-	
-	/*
-	 * Return string card
-	 */
-	public String toString() {
-		return (this.hauteur<10?"0"+this.hauteur:(this.hauteur>10?10:this.hauteur)) + " - " + this.couleur;
 	}
 }

@@ -4,10 +4,10 @@ import view.View;
 
 /**
  * 
- * @author Alexis Prevost-Maynen 
- * @author Guillaume 
- * @author Lucas
- * @author Nicolas
+ * @author Alexis Prevost-Maynen - 21511372
+ * @author Guillaume Drouart - 21009341 
+ * @author Lucas Gouédard - 21506676
+ * @author Nicolas Vatel - 21410740
  *
  */
 public class Launcher {

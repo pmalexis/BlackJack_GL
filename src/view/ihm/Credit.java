@@ -69,11 +69,10 @@ public class Credit extends JPanel implements ActionListener, MouseListener {
 		g.drawString("Copyright © 2016 - UFR de Sciences - Universite Caen-Normandie", getWidth()/3 - getWidth()/15, getHeight() - getHeight()/50);
 	}
 
+	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.retourMenu) this.ihm.menu();
 	}
-
-
 	
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource() == this.retourMenu) {

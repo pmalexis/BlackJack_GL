@@ -69,7 +69,6 @@ public class Paquet {
 	
 	/*
 	 * Cut pack card
-	 * VOIR SI REMVOIE DE ALTEMPO !!!
 	 */
 	public boolean cutPack() {
 		if(this.alCard.isEmpty()) return false;
@@ -93,17 +92,5 @@ public class Paquet {
 	 * --------------------------- */
 	public ArrayList<Carte> getAlCard() {
 		return this.alCard;
-	}
-	
-	/*
-	 * return string of alCard
-	 */
-	public String toString() {
-		String s = "";
-		
-		for(int i=0;i<this.alCard.size();i++) {
-			s += this.alCard.get(i).toString() + "\n";
-		}
-		return s;
 	}
 }

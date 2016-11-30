@@ -13,6 +13,7 @@ import controleur.Controleur;
 import model.Player;
 import model.bot.Bot;
 
+@SuppressWarnings("serial")
 public class DrawButton extends JPanel implements ActionListener {
 
 	private Controleur ctrl;
@@ -67,7 +68,7 @@ public class DrawButton extends JPanel implements ActionListener {
 		}
 		
 		try {
-			Bot test = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
+			Bot bot = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
 			
 			this.hit.setEnabled(false);
 			this.stand.setEnabled(false);
@@ -106,7 +107,7 @@ public class DrawButton extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		try {
-			Bot test = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
+			Bot bot = (Bot)this.ctrl.getThisPlayer(Start.identifiant);
 		}
 		catch (Exception ex) {
 			boolean hit, stand, doubles, split, insurance, isSplit;
