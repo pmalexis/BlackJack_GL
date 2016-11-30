@@ -49,7 +49,7 @@ public class Visu extends JPanel implements ActionListener {
         this.bet.setForeground(Color.WHITE);
         add(this.bet);
         
-        this.parier = new JButton("COMMENCER LA PARTIE");
+        this.parier = new JButton("Choissisez vos jetons");
         this.parier.addActionListener(this);
         add(this.parier);
         this.parier.setEnabled(false);
@@ -130,10 +130,10 @@ public class Visu extends JPanel implements ActionListener {
 				cpt += 3;
 			}
 
-			Paquet test = this.ctrl.getThisPlayer(0).getHand();
+			Paquet hand = this.ctrl.getThisPlayer(0).getHand();
 			cpt = 0;
 			int nbCarte = 1;
-			for(Carte c : test.getAlCard()) {
+			for(Carte c : hand.getAlCard()) {
 				if(!this.ctrl.getThisPlayer(0).getTurnDown() && nbCarte == 2) 
 					g.drawImage(this.getImage(null, 53), getWidth()/2-getWidth()/15 + cpt, 10 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);	
 				else g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2-getWidth()/15 + cpt, 10 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
@@ -147,16 +147,16 @@ public class Visu extends JPanel implements ActionListener {
 				if(this.ctrl.getThisPlayer(Start.identifiant).getInsurance() > 0)
 					g.drawString("Insurance : " + this.ctrl.getThisPlayer(Start.identifiant).getInsurance() + " | " + this.ctrl.getThisPlayer(Start.identifiant).getInsuranceSplit(), getWidth()/2 - getWidth()/7, getHeight()/2 - 20);
 				
-				test = this.ctrl.getThisPlayer(Start.identifiant).getHand();
+				hand = this.ctrl.getThisPlayer(Start.identifiant).getHand();
 				cpt = 0;
-				for(Carte c : test.getAlCard()) {
+				for(Carte c : hand.getAlCard()) {
 					g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2-getWidth()/7 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
 					cpt += getWidth()/50;
 				}
 				
-				test = this.ctrl.getThisPlayer(Start.identifiant).getSplit();
+				hand = this.ctrl.getThisPlayer(Start.identifiant).getSplit();
 				cpt = 0;
-				for(Carte c : test.getAlCard()) {
+				for(Carte c : hand.getAlCard()) {
 					g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
 					cpt += getWidth()/50;
 				}
@@ -167,15 +167,46 @@ public class Visu extends JPanel implements ActionListener {
 				if(this.ctrl.getThisPlayer(Start.identifiant).getInsurance() > 0 || this.ctrl.getThisPlayer(Start.identifiant).getInsuranceSplit() > 0)
 					g.drawString("Insurance : " + this.ctrl.getThisPlayer(Start.identifiant).getInsurance(), getWidth()/2 - getWidth()/10, getHeight()/2 - 20);
 				
-				test = this.ctrl.getThisPlayer(Start.identifiant).getHand();
+				hand = this.ctrl.getThisPlayer(Start.identifiant).getHand();
 				cpt = 0;
-				for(Carte c : test.getAlCard()) {
+				for(Carte c : hand.getAlCard()) {
 					g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2-getWidth()/15 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
 					cpt += getWidth()/50;
 				}
 				this.bet.setText(""+this.ctrl.getThisPlayer(Start.identifiant).getBet());
 			}
 			this.parier.setBounds(-500,-500,0,0);
+			
+			//on dessine les cartes des bots
+			if(this.ctrl.getPlayers().size() > 2) {
+				for(int i=2;i<this.ctrl.getPlayers().size();i++) {
+					if(i==2) {
+						g.drawString(this.ctrl.getThisPlayer(i).getName(), getWidth()/2 - getWidth()/3, getHeight()/2 - 20);
+						hand = this.ctrl.getThisPlayer(i).getHand();
+						cpt = 0;
+						for(Carte c : hand.getAlCard()) {
+							g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2-getWidth()/3 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
+							cpt += getWidth()/50;
+						}
+						if(this.ctrl.getThisPlayer(i).getBet()==0)
+							((Bot)this.ctrl.getThisPlayer(i)).bet(this.ctrl.getMoteur());
+						g.drawString(""+this.ctrl.getThisPlayer(i).getBet(), getWidth()/2 - getWidth()/3, getHeight()-getHeight()/18);
+					}
+					else {
+						g.drawString(this.ctrl.getThisPlayer(i).getName(), getWidth()/2 + getWidth()/5, getHeight()/2 - 20);
+						hand = this.ctrl.getThisPlayer(i).getHand();
+						cpt = 0;
+						for(Carte c : hand.getAlCard()) {
+							g.drawImage(this.getImage(c.getCouleur(), c.getHauteur()), getWidth()/2 + getWidth()/5 + cpt, getHeight() - getHeight()/2 + cpt, getWidth()/10, getHeight()/4 + getHeight()/15, null);
+							cpt += getWidth()/50;
+						}
+						if(this.ctrl.getThisPlayer(i).getBet()==0)
+							((Bot)this.ctrl.getThisPlayer(i)).bet(this.ctrl.getMoteur());
+						g.drawString(""+this.ctrl.getThisPlayer(i).getBet(), getWidth()/2 + getWidth()/5, getHeight()-getHeight()/18);
+					
+					}
+				}
+			}
 			
 		}
 		this.bet.setFont(new Font("Arial", Font.ITALIC, this.getWidth()/40));
@@ -191,14 +222,21 @@ public class Visu extends JPanel implements ActionListener {
 		}
 		
 		if(fini) {
-			if((this.ctrl.getThisPlayer(Start.identifiant).computeValue(false) > 21 
-			    && this.ctrl.getThisPlayer(Start.identifiant).getSplit() == null) 
-				|| (this.ctrl.getThisPlayer(Start.identifiant).computeValue(false) > 21 
-			    && this.ctrl.getThisPlayer(Start.identifiant).getSplit() != null
-				&& this.ctrl.getThisPlayer(Start.identifiant).computeValue(false) > 21) ) {
-				this.banquier = true;
-			}
-			
+			if(!banquier)
+				for(int i=1;i<this.ctrl.getPlayers().size();i++) {
+					if((this.ctrl.getThisPlayer(i).computeValue(false) > 21 
+					    && this.ctrl.getThisPlayer(i).getBetSplit() == 0) 
+						|| (this.ctrl.getThisPlayer(i).computeValue(false) > 21 
+					    && this.ctrl.getThisPlayer(i).getBetSplit() == 0
+						&& this.ctrl.getThisPlayer(i).computeValue(false) > 21) ) {
+						this.banquier = true;
+					}
+					else {
+						this.banquier = false;
+						break;
+					}
+				}
+				
 			if(!this.banquier) {
 				this.banquier = true;
 				this.ctrl.bankPlay();
@@ -211,9 +249,28 @@ public class Visu extends JPanel implements ActionListener {
 					this.start.startDrawScore();
 				}
 		}
+		else if (this.ctrl.getThisPlayer(Start.identifiant).getTurnDown()) {
+			for(int i=2;i<this.ctrl.getPlayers().size();i++) {
+	  			Bot test = (Bot)this.ctrl.getThisPlayer(i);
+	  			if(test != null) {
+	  				Thread t = new Thread() {
+	  					public void run() {
+	  						try {
+	  				            while(!test.getTurnDown()) {
+	  				            	Thread.sleep(2000);
+	  				            	test.play(ctrl.getMoteur());	
+	  				            }
+	  				        }  catch (InterruptedException e) {}
+	  					}
+	  				};
+	  				t.start();
+	  			}
+			}
+		}
 	}
 	
 	public void setText(int bet) {
+		this.parier.setText("Commencer la partie");
 		this.bet.setText(""+bet);
 		this.parier.setEnabled(true);
 		revalidate();

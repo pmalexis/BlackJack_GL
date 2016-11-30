@@ -63,6 +63,8 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 	private JRadioButton bot2Def;
 	
 	private int nbBot = 0;
+	private String bot1 = "atk";
+	private String bot2 = "def";
 	
 	private boolean first_step = false;
 	
@@ -100,7 +102,7 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 		
 		groupChoseBot1 = new ButtonGroup();
 		bot1Atk = new JRadioButton("bot 1 agressif");
-		bot1Def = new JRadioButton("bot 1 defenssif");
+		bot1Def = new JRadioButton("bot 1 defensif");
 		groupChoseBot1.add(bot1Atk);
 		groupChoseBot1.add(bot1Def);
 		groupChoseBot1.setSelected(bot1Atk.getModel(), true);
@@ -111,7 +113,7 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 		
 		groupChoseBot2 = new ButtonGroup();
 		bot2Atk = new JRadioButton("bot 2 agressif");
-		bot2Def = new JRadioButton("bot 2 defenssif");
+		bot2Def = new JRadioButton("bot 2 defensif");
 		groupChoseBot2.add(bot2Atk);
 		groupChoseBot2.add(bot2Def);
 		groupChoseBot2.setSelected(bot2Def.getModel(), true);
@@ -180,7 +182,11 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 
 	public void actionPerformed(ActionEvent e) {
 		
-		if(e.getSource() == this.zero) {
+		if(e.getSource() == this.bot1Atk) bot1 = "atk";
+		else if(e.getSource() == this.bot1Def) bot1 = "def";
+		else if(e.getSource() == this.bot2Atk) bot2 = "atk";
+		else if(e.getSource() == this.bot2Def) bot2 = "def";
+		else if(e.getSource() == this.zero) {
 			this.nbBot = 0;
 			bot1Atk.setEnabled(false);
 			bot1Def.setEnabled(false);
@@ -196,6 +202,8 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 		}
 		else if(e.getSource() == this.two) {
 			this.nbBot = 2;
+			bot1Atk.setEnabled(true);
+			bot1Def.setEnabled(true);
 			bot2Atk.setEnabled(true);
 			bot2Def.setEnabled(true);
 		}
@@ -217,8 +225,6 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 		   			name = "bot_def";
 		   		}
 	            
-	            
-			
 	            this.initVisu(name);
 			}
 		}
@@ -232,6 +238,9 @@ public class Start extends JPanel implements ActionListener, MouseListener {
 			int money = Fichier.getMoney(name);
 			this.ctrl.addPlayer(name, money);
 		}
+		
+		if(nbBot > 0) this.ctrl.addBot(bot1);
+		if(nbBot > 1) this.ctrl.addBot(bot2);
         
         //On ajoute un JPanel pour l'utiliser avec miser (pour afficher les jetons)
         //et avec partieEnCour pour afficher les boutons d action
