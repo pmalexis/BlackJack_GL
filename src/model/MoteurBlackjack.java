@@ -68,7 +68,9 @@ public class MoteurBlackjack extends Observable{
 			}
 	}
 	
-	
+	/**
+	 * Give the won bets to the players
+	 */
 	public void distributeBets() {
 		for(int i=1;i<this.tabPlayers.size();i++) {
 			Player p = this.tabPlayers.get(i);
@@ -76,8 +78,8 @@ public class MoteurBlackjack extends Observable{
 		}
 	}
 	
-	/*
-	 * a turn 
+	/**
+	 * a turn, the player hits depending on the value of split
 	 */
 	public void hit(Player player, boolean split) {
 		
@@ -89,10 +91,10 @@ public class MoteurBlackjack extends Observable{
 			alPaquet.addBot(this.paquet.dropTop());
 	}
 	
-	/*
-	 * split 
+	/**
+	 * split the hand of the current player
 	 */
-	public boolean split(Player player) {
+	public void split(Player player) {
 		
 		if(this.canSplit(player) ) {	
 			player.getSplit().addBot(player.getHand().dropBot());
@@ -101,34 +103,32 @@ public class MoteurBlackjack extends Observable{
 			
 			player.setBetSplit(player.getBet());
 			player.setMoney(player.getMoney()-player.getBet());
-			
-			return true;
 		}
-		
-		return false;
 	} 
 	
-	/*
-	 * do a insurance
+	/**
+	 * @param player
+	 * @param boolean split
+	 * 
+	 * do an insurance on the current player
 	 * bet half of your actual bet on the next (value 2:1)
 	 */
-	public boolean insurance(Player player, boolean split) {
+	public void insurance(Player player, boolean split) {
 		
 		if(!split && this.getPlayers().get(0).getHand().getAlCard().get(0).getHauteur() == 1) {
 			player.setInsurance(player.getBet()/2);
 			player.setMoney(player.getMoney() - player.getBet()/2);
-			return true;
 		}
 		else if(split && this.getPlayers().get(0).getHand().getAlCard().get(0).getHauteur() == 1) {
 			player.setInsuranceSplit(player.getBetSplit()/2);
 			player.setMoney(player.getMoney() - player.getBetSplit()/2);
-			return true;
 		}
-		return false;
 	}
 	
-	/*
-	 * return 21 if blackjack
+	/**
+	 * @param player
+	 * @param boolean split
+	 * Return 21 if blackjack
 	 */
 	public boolean blackjack(Player player, boolean split) {
 		int n = 0;
@@ -149,7 +149,8 @@ public class MoteurBlackjack extends Observable{
 		return n == 21;
 	}
 	
-	/*
+	/**
+	 * @param player
 	 * Say if you can split
 	 */
 	public boolean canSplit(Player player) {
@@ -160,28 +161,26 @@ public class MoteurBlackjack extends Observable{
 		return one == two;
 	}
 	
-	/*
-	 * the bank play value card enter 17 and 21
-	 * strategie
+	/**
+	 * The bank play value card between 17 and more
 	 */
-	public boolean bankPlay() {
+	public void bankPlay() {
 		while (this.tabPlayers.get(0).computeValue(false) < 17) {
 			this.hit(tabPlayers.get(0), false);
-		} 
-		
-		return true;
+		}
 	}
 	
-	/*
-	 * Reset at zero on the position give in the function
+	/**
+	 * @param player
+	 * Reset to zero on the position give in the function
 	 */
 	public void resetBetTable(Player player) {
 		player.setBet(0);
 		player.setBetSplit(0);
 	}
 	
-	/*
-	 * the bet return to the player 
+	/**
+	 * The bets return to the players
 	 */
 	public void backBet() {
 		for(Player player : tabPlayers) {
@@ -192,44 +191,56 @@ public class MoteurBlackjack extends Observable{
 		}
 	}
 	
-	/*
-	 * Add the value n int the betTable at the position i
+	/**
+	 * @param player
+	 * @param boolean split
+	 * @param int x
+	 * Add the value bet*x in the betTable for the current player
 	 */
 	public void addBetTable(Player player, boolean split, int x) {
 		if(split) player.setBetSplit(player.getBetSplit()*x);
 		else player.setBet(player.getBet()*x);
 	}
 	
-	/* --------------------------- *
-	 *   GET - return the values
-	 * --------------------------- */
+	/**
+	 * @return Paquet
+	 */
 	public Paquet getPaquet() {
 		return this.paquet;
 	}
 	
+	/**
+	 * @return ArrayList<Player>
+	 */
 	public ArrayList<Player> getPlayers() {
 		return this.tabPlayers;
 	}
 	
+	/**
+	 * @param player
+	 * @return money of the current player
+	 */
 	public int getMoney(Player player) {
 		return player.getMoney();
 	}
     
+	/**
+	 * @return nb player
+	 */
     public int getNbPlayers() {
         return tabPlayers.size();
     }
 	
-	/* --------------------------- *
-	 *   SET - change the values
-	 * --------------------------- */
-	public boolean setBetTable(Player player, int n) {
+	/**
+	 * Change the value of the bet and the money of the current player
+	 * @param player
+	 * @param n
+	 */
+	public void setBetTable(Player player, int n) {
 		if(player.getMoney() >= n) {
 			player.setBet(n + player.getBet());
 			player.setMoney(player.getMoney() - n);
 			notifyObservers();
-			return true;
 		}
-		
-		return false;
 	}
 }
