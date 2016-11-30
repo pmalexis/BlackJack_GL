@@ -45,7 +45,7 @@ public class TestMoteur {
                     
 					
 					while(true) {
-                        mBJ.createPlayer(nb_players);
+                        //mBJ.createPlayer(nb_players);
 						mBJ.initAll();
 						mBJ.distribution();
 					
@@ -82,12 +82,12 @@ public class TestMoteur {
 							else {
 								int cpt = 1;
 								do {
-									if(player.getValue(false) >= 21) {
+									if(player.computeValue(false) >= 21) {
 										turnDown = true;
 									}
 									else {
 										System.out.println(mBJ.getPlayers().get(0).getHandString());
-										System.out.println(player.getHandString() + " => " + player.getValue(false));
+										System.out.println(player.getHandString() + " => " + player.computeValue(false));
 										s = player.getName() + " | hit (h) | stand (r) | ";
 										if(cpt == 1) {
 											s += "double (d) | ";
@@ -115,12 +115,12 @@ public class TestMoteur {
 										boolean turnDownSplit = false;
 										cpt = 1;
 										do {
-											if(player.getValue(true) >= 21) {
+											if(player.computeValue(true) >= 21) {
 												turnDownSplit = true;
 											}
 											else {
 												System.out.println(mBJ.getPlayers().get(0).getHandString());
-												System.out.println(player.getHandSplitString() + " => " + player.getValue(true));
+												System.out.println(player.getHandSplitString() + " => " + player.computeValue(true));
 												s = player.getName() + " | hit (h) | stand (r) | ";
 												if(cpt == 1) s += "double (d) | ";
 												System.out.println(s);
@@ -136,15 +136,15 @@ public class TestMoteur {
 										} while (!turnDownSplit); 
 										cpt = 0;
 										turnSplit = true;
-										System.out.println(player.getName() + " VOUS ETES A " + player.getValue(true));
-										if(player.getValue(true) > 21) System.out.println("VOUS AVEZ PERDU !\n");
+										System.out.println(player.getName() + " VOUS ETES A " + player.computeValue(true));
+										if(player.computeValue(true) > 21) System.out.println("VOUS AVEZ PERDU !\n");
 										else System.out.println("ATTENDEZ QUE LE BANQUIER JOUE !\n");
 									}
 								} while (!turnDown);
 							}
 							if(!mBJ.blackjack(player)) {
-								System.out.println(player.getName() + " VOUS ETES A " + player.getValue(false));
-								if(player.getValue(false) > 21) System.out.println("VOUS AVEZ PERDU !\n");
+								System.out.println(player.getName() + " VOUS ETES A " + player.computeValue(false));
+								if(player.computeValue(false) > 21) System.out.println("VOUS AVEZ PERDU !\n");
 								else System.out.println("ATTENDEZ QUE LE BANQUIER JOUE !\n");
 							}
 						}
@@ -157,40 +157,40 @@ public class TestMoteur {
                             
                             Player player = mBJ.getPlayers().get(i);
 							
-							if(player.getValue(true) != 0 && !split) {
+							if(player.computeValue(true) != 0 && !split) {
 								split = true;
 							}
 							else split = false;	
 							
-							if(player.getValue(split) <= 21) {
+							if(player.computeValue(split) <= 21) {
 								//tests blackjack 
 								if(mBJ.blackjack(mBJ.getPlayers().get(0)) && mBJ.blackjack(player)) {
 									//recup mise
 									System.out.println("BLACKJACK EGALITE, REDISTRIBUTION DES MISES, JOUEUR " + (split?"BIS ":"") + player.getName());
 								}
-								else if(mBJ.blackjack(mBJ.getPlayers().get(0)) && player.getValue(split) == 21) {
+								else if(mBJ.blackjack(mBJ.getPlayers().get(0)) && player.computeValue(split) == 21) {
 									//perd mise
 									System.out.println("BLACKJACK POUR LA BANQUE, MISE DONNE A LA BANQUE, JOUEUR " + (split?"BIS ":"") + player.getName());
 									mBJ.resetBetTable(player);
 								}
-								else if(mBJ.blackjack(player) && mBJ.getPlayers().get(0).getValue(split) == 21) {
+								else if(mBJ.blackjack(player) && mBJ.getPlayers().get(0).computeValue(split) == 21) {
 									//gagne double mise
 									System.out.println("BLACKJACK POUR LE JOUEUR, MISE DONNE A LA BANQUE, JOUEUR " + (split?"BIS ":"") + player.getName());
 									mBJ.addBetTable(player, player.getBet());
 								}
 								else { //puis test classique
-									if(mBJ.getPlayers().get(0).getValue(split) <= 21 && mBJ.getPlayers().get(0).getValue(split) > player.getValue(split)) {
+									if(mBJ.getPlayers().get(0).computeValue(split) <= 21 && mBJ.getPlayers().get(0).computeValue(split) > player.computeValue(split)) {
 										System.out.println("LA BANQUE GAGNE CONTRE LE JOUEUR " + (split?"BIS ":"") + player.getName());
 										mBJ.resetBetTable(player);
 									}
-									else if (mBJ.getPlayers().get(0).getValue(split) > 21 || mBJ.getPlayers().get(0).getValue(split) < player.getValue(split)) {
+									else if (mBJ.getPlayers().get(0).computeValue(split) > 21 || mBJ.getPlayers().get(0).computeValue(split) < player.computeValue(split)) {
 										System.out.println(player.getName() + (split?"BIS ":"") + " GAGNE CONTRE LA BANQUE");
 										mBJ.addBetTable(player, player.getBet());
 									}
 									else {
 										System.out.println("EGALITE POUR " + player.getName() + (split?"BIS ":"") + " ET LA BANQUE");
 									}
-									System.out.println("BANQUE => " + mBJ.getPlayers().get(0).getValue(false) + "\nJOUEUR " + (split?"BIS ":"") + player.getName() + " => " + player.getValue(split) + "\n");
+									System.out.println("BANQUE => " + mBJ.getPlayers().get(0).computeValue(false) + "\nJOUEUR " + (split?"BIS ":"") + player.getName() + " => " + player.computeValue(split) + "\n");
 								}
 							} else mBJ.resetBetTable(player);
 							

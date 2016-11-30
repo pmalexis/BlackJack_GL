@@ -17,17 +17,23 @@ public class Player {
 	
 	private int money;
 	private int insurance;
+	private int insuranceSplit;
 	
-	public Player(String name) {
+	private boolean turnDown = false;
+	
+	public Player(String name, int money) {
 		this.name = name;
 		
 		this.hand      = new Paquet();
 		this.handSplit = new Paquet();
 		
-		this.money     = 5555;
+		this.money     = money;
+		
 		this.bet       = 0;
 		this.betSplit  = 0;
-		this.insurance = 0;
+		
+		this.insurance      = 0;
+		this.insuranceSplit = 0;
 	}
     
     public void resetHand() {
@@ -67,7 +73,7 @@ public class Player {
 		return this.insurance;
 	}
 
-	public int getValue(boolean split) {
+	public int computeValue(boolean split) {
 		int n  = 0;
 		int as = 0;
 		
@@ -109,6 +115,10 @@ public class Player {
 		this.insurance = n;
 	}
 	
+	public void setInsuranceSplit(int n) {
+		this.insuranceSplit = n;
+	}
+	
 	public void setName(String s) {
 		this.name = s;
 	}
@@ -132,5 +142,17 @@ public class Player {
 			s += this.handSplit.getAlCard().get(j) + " | ";
 		
 		return s;
+	}
+
+	public boolean getTurnDown() {
+		return turnDown;
+	}
+
+	public void setTurnDown(boolean turnDown) {
+		this.turnDown = turnDown;
+	}
+
+	public int getInsuranceSplit() {
+		return this.insuranceSplit;
 	}
 }

@@ -6,6 +6,8 @@ import javax.swing.text.View;
 
 import model.MoteurBlackjack;
 import model.Player;
+import model.bot.BotAgressif;
+import model.bot.BotDefensif;
 
 
 /*
@@ -19,8 +21,8 @@ public class Controleur {
 		this.moteur = moteur;
 	}
 	
-	public void addPlayer(String name) {
-		this.moteur.addPlayer(new Player(name));
+	public void addPlayer(String name, int money) {
+		this.moteur.addPlayer(new Player(name, money));
 	}
 	
 	public ArrayList<Player> getPlayers() {
@@ -37,5 +39,61 @@ public class Controleur {
 
 	public void setBetTable(Player player, int bet) {
 		this.moteur.setBetTable(player, bet);
+	}
+	
+	public void distribution() {
+		this.moteur.distribution();
+	}
+
+	public void hit(Player player, boolean split) {
+		this.moteur.hit(player, split);
+	}
+
+	public void setTurnDown(Player player, boolean turnDown) {
+		player.setTurnDown(turnDown);
+	}
+
+	public boolean canSplit(Player player) {
+		return this.moteur.canSplit(player);
+	}
+	
+	public void insurance(Player player, boolean split) {
+		this.moteur.insurance(player, split);
+	}
+
+	public void bankPlay() {
+		this.moteur.bankPlay();
+	}
+
+	public boolean blackjack(Player player, boolean split) {
+		return this.moteur.blackjack(player, split);
+	}
+
+	public void resetBetTable(Player player) {
+		this.moteur.resetBetTable(player);
+	}
+
+	public void addBetTable(Player player, boolean split, int x) {
+		this.moteur.addBetTable(player, split, x);
+	}
+
+	public void init() {
+		this.moteur.initAll();
+	}
+
+	public void split(Player player) {
+		this.moteur.split(player);
+	}
+	
+	public void distributeBets() {
+		this.moteur.distributeBets();
+	}
+
+	public void addBot(String name) {
+		Player player = null;
+		if(name.equals("atk")) player = new BotAgressif();
+		else player = new BotDefensif();
+		
+		this.moteur.addPlayer(player);
 	}
 }

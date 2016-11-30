@@ -18,6 +18,8 @@ import view.ihm.Start;
 @SuppressWarnings("serial")
 public class View extends JFrame implements Observer{
 
+	private Controleur crtl;
+	
 	public View(Controleur crtl) {
 		setTitle("BLACKJACK");
 		setLocation(100, 100);
@@ -26,6 +28,8 @@ public class View extends JFrame implements Observer{
         int width = (int) screenSize.getWidth();
         int height = (int) screenSize.getHeight();
 		setSize(width, height);
+		
+		this.crtl = crtl;
 		
 		setUndecorated(true);
 		this.menu();
@@ -41,10 +45,10 @@ public class View extends JFrame implements Observer{
 		this.setVisible(true); 
 	}
 	
-	public void start() {
+	public void start(String name) {
 		getContentPane().removeAll();
 		repaint();
-		add(new Start(this));
+		add(new Start(this, this.crtl, name));
 		this.setVisible(true);
 	}
 	
@@ -69,9 +73,7 @@ public class View extends JFrame implements Observer{
 		this.setVisible(true); 
 	}
 
-	@Override
 	public void update(Observable o, Object arg) {
 		System.out.println((String) arg);
-		
 	}
 }

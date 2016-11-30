@@ -41,6 +41,43 @@ public class Fichier {
 		
 		return al;
 	}
+	
+	/*
+	 * return money from the name who is give
+	 */
+	public static int getMoney(String name) {
+		ArrayList<String> al = Fichier.getLignes(Fichier.getFichier("joueurs.txt"));
+		int retour = 5555;
+
+		for(int i=0;i<al.size();i++)
+			if(al.get(i).split("-")[0].equals(name))
+				retour = Integer.parseInt(al.get(i).split("-")[1].trim());
+		
+		return retour;
+	}
+	
+	/*
+	 * change money from the name who is give
+	 */
+	public static void setMoney(String name, int money) {
+		if(name.equals("Joueur")) return;
+		ArrayList<String> al = Fichier.getLignes(Fichier.getFichier("joueurs.txt"));
+		FileWriter ffw;
+
+		int cpt = 0;
+		for(int i=0;i<al.size();i++)
+			if(al.get(i).split("-")[0].equals(name))
+				cpt = i;
+		
+		try {
+			ffw = new FileWriter("res/tools/joueurs.txt");
+			for(int i=0;i<al.size();i++) {
+				if(i==cpt) ffw.write(name + "-" + money + " \r\n");
+				else ffw.write(al.get(i) + " \r\n");
+			}
+			ffw.close();
+		} catch (IOException ex) {}
+	}
 
 	/*
 	 * add a player in the file joueurs.txt

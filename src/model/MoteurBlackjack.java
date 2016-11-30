@@ -10,7 +10,7 @@ import model.cards.Paquet;
 
 
 public class MoteurBlackjack extends Observable{
-
+	
 	private final int NB_CARDS_BY_HANDS_START = 2;
 	private final int NB_PLAYERS_MAX = 5;
 	
@@ -22,7 +22,7 @@ public class MoteurBlackjack extends Observable{
 	 * Constructor
 	 */
 	public MoteurBlackjack(){
-        this.tabPlayers = new ArrayList<Player>();
+        this.initAll();
     }
     
     /*
@@ -38,41 +38,22 @@ public class MoteurBlackjack extends Observable{
         return this.tabPlayers.remove(player);
     }
     
-    public void createPlayer(int nb_players) {
-        this.tabPlayers = new ArrayList<Player>();
-        for(int i=0;i<nb_players+1;i++) 
-            this.tabPlayers.add(new Player((i>0?"Joueur "+i:"Banquier")));
-    }
-    
 	/*
 	 * initialization of the paquet and tabPlayers
 	 */
-	public boolean initAll(/*ArrayList<Player> allPlayers*/) {
+	public boolean initAll() {
+		this.tabPlayers = new ArrayList<Player>();
+        this.tabPlayers.add(new Player("Croupier", 0));
 		this.paquet = new Paquet();
 		Couleur[] tabCouleur = {Couleur.Pique, Couleur.Trefle, Couleur.Carreau, Couleur.Coeur};
 		
 		for(int nb_pack=0;nb_pack<1;nb_pack++) { //nb pack
 			for(int i=0;i<4;i++) {// 4 colors
 				for(int j=1;j<14;j++) { // 13 cards
-					this.paquet.addTop(new Carte(j, tabCouleur[i]));
+					this.paquet.addTop(new Carte(j, tabCouleur[i])); //IZEHPBGZGEZUJBFIPUGGB
 				}
             }
         }
-		
-        /* MODIFICATION SERVEUR */
-        /* Permet la compatibilité entre le serveur et le moteur */
-        /*if(allPlayers == null) {
-            this.tabPlayers = new Player[this.NB_PLAYERS_MAX + 1];
-            for(int i=0;i<this.nb_players+1;i++)
-                this.tabPlayers[i] = new Player((i>0?"Joueur "+i:"Banquier"));
-        }
-        else {
-            allPlayers.add(0, new Player("Banquier"));
-            this.tabPlayers = new Player[this.nb_players + 1];
-            for(int i=0;i<tabPlayers.length;i++) {
-                this.tabPlayers[i] = allPlayers.get(i);
-            }
-        }*/
 			
 		return true;
 	}
@@ -113,7 +94,10 @@ public class MoteurBlackjack extends Observable{
 			player.getSplit().addBot(player.getHand().dropBot());
 			player.getSplit().addBot(this.paquet.dropTop());
 			player.getHand().addBot(this.paquet.dropTop());
-					
+			
+			player.setBetSplit(player.getBet());
+			player.setMoney(player.getMoney()-player.getBet());
+			
 			return true;
 		}
 		
@@ -124,10 +108,16 @@ public class MoteurBlackjack extends Observable{
 	 * do a insurance
 	 * bet half of your actual bet on the next (value 2:1)
 	 */
-	public boolean insurance(Player player) {
+	public boolean insurance(Player player, boolean split) {
 		
-		if(player.getHand().getAlCard().get(0).getHauteur() == 1) {
+		if(!split && this.getPlayers().get(0).getHand().getAlCard().get(0).getHauteur() == 1) {
 			player.setInsurance(player.getBet()/2);
+			player.setMoney(player.getMoney() - player.getBet()/2);
+			return true;
+		}
+		else if(split && this.getPlayers().get(0).getHand().getAlCard().get(0).getHauteur() == 1) {
+			player.setInsuranceSplit(player.getBetSplit()/2);
+			player.setMoney(player.getMoney() - player.getBetSplit()/2);
 			return true;
 		}
 		return false;
@@ -136,12 +126,15 @@ public class MoteurBlackjack extends Observable{
 	/*
 	 * return 21 if blackjack
 	 */
-	public boolean blackjack(Player player) {
+	public boolean blackjack(Player player, boolean split) {
 		int n = 0;
-        System.out.println(player.getName() + "dans la méthode blackjack");
 		
-		int ifOne = player.getHand().getAlCard().get(0).getHauteur();
-		int ifTwo = player.getHand().getAlCard().get(1).getHauteur();
+		Paquet alPaquet;
+		if(split) alPaquet = player.getSplit();
+		else alPaquet = player.getHand();
+		
+		int ifOne = alPaquet.getAlCard().get(0).getHauteur();
+		int ifTwo = alPaquet.getAlCard().get(1).getHauteur();
 		
 		if(ifOne == 1) n += 11;
 		else n += ifOne > 10 ? 10 : ifOne;
@@ -160,7 +153,7 @@ public class MoteurBlackjack extends Observable{
 		int one = player.getHand().getAlCard().get(0).getHauteur();
 		int two = player.getHand().getAlCard().get(1).getHauteur();
 		
-		return (one>10?10:one) == (two>10?10:two);
+		return one == two;
 	}
 	
 	/*
@@ -168,7 +161,7 @@ public class MoteurBlackjack extends Observable{
 	 * strategie
 	 */
 	public boolean bankPlay() {
-		while (this.tabPlayers.get(0).getValue(false) < 17) {
+		while (this.tabPlayers.get(0).computeValue(false) < 17) {
 			this.hit(tabPlayers.get(0), false);
 		} 
 		
@@ -180,6 +173,7 @@ public class MoteurBlackjack extends Observable{
 	 */
 	public void resetBetTable(Player player) {
 		player.setBet(0);
+		player.setBetSplit(0);
 	}
 	
 	/*
@@ -187,17 +181,19 @@ public class MoteurBlackjack extends Observable{
 	 */
 	public void backBet() {
 		for(Player player : tabPlayers) {
-			if(player != null) //ZERGZERGZREGZRZG manque peut-être des accolades
+			if(player != null) { //ZERGZERGZREGZRZG manque peut-être des accolades
 				player.setMoney(player.getMoney() + player.getBetSplit());
 				player.setMoney(player.getMoney() + player.getBet());
+			}
 		}
 	}
 	
 	/*
 	 * Add the value n int the betTable at the position i
 	 */
-	public void addBetTable(Player player, int n) {
-		player.setBet(player.getBet() + n);
+	public void addBetTable(Player player, boolean split, int x) {
+		if(split) player.setBetSplit(player.getBetSplit()*x);
+		else player.setBet(player.getBet()*x);
 	}
 	
 	/* --------------------------- *
@@ -227,9 +223,16 @@ public class MoteurBlackjack extends Observable{
 			player.setBet(n + player.getBet());
 			player.setMoney(player.getMoney() - n);
 			notifyObservers();
-			return false;
+			return true;
 		}
 		
 		return false;
+	}
+	
+	public void distributeBets() {
+		for(int i=1;i<this.tabPlayers.size();i++) {
+			Player p = this.tabPlayers.get(i);
+			p.setMoney(p.getMoney() + p.getBet() + p.getBetSplit());
+		}
 	}
 }
