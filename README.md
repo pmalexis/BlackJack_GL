@@ -1,12 +1,21 @@
-# blackack_GL
+# blackjack_GL
 Création d'un Blackjack (MVC) avec une IA - projet L3 Info
 
-- Alexis
-- Guillaume
-- Lucas
-- Nicolas
+- Alexis Prevost-Maynen - 21511372
+- Guillaume Drouart - 21009341
+- Lucas Gouédard - 21506676
+- Nicolas Vatel - 21410740
 
-Sujet du projet de Génie Logiciel
+PARTIE LUCAS - ANT - BUILT 
+
+Comment fonctionnent les bots ?
+
+Vous pouvez choisir entre le bot attaquant & défensif.
+Le bot attaquant va miser la moitié de son argent puis va piocher jusqu'à ce qu'il ait une main de valeur 18 ou supérieur.
+Le bot defensif va miser le dixième de son argent puis va piocher jusqu'à ce qu'il ait une main de valeur 11 ou supérieur.
+
+
+Sujet du projet de Génie Logiciel :
 
 Vision synthétique de l’application : On souhaite une application permettant de jouer
 au black-jack, un jeu habituellement pratiqué dans les casinos. Le jeu sera un jeu monoposte,
