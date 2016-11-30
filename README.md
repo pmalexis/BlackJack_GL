@@ -6,6 +6,8 @@ Création d'un Blackjack (MVC) avec une IA - projet L3 Info
 - Lucas Gouédard - 21506676
 - Nicolas Vatel - 21410740
 
+----------------------------------------------------------------------------------------------------------------------------------------
+
 Ant - build.xml
 
 Le projet fonctionne via Ant. Ce dernier est basé sur le build.xml utilisé en cours.
@@ -20,6 +22,7 @@ Pour finir voici les targets à lancer pour effectuer les tests et générer les
 - $ ant junit
 - $ ant junitreport
 
+----------------------------------------------------------------------------------------------------------------------------------------
 
 Comment fonctionnent les bots ?
 
@@ -27,6 +30,7 @@ Vous pouvez choisir entre le bot attaquant & défensif.
 Le bot attaquant va miser la moitié de son argent puis va piocher jusqu'à ce qu'il ait une main de valeur 18 ou supérieur.
 Le bot defensif va miser le dixième de son argent puis va piocher jusqu'à ce qu'il ait une main de valeur 11 ou supérieur.
 
+----------------------------------------------------------------------------------------------------------------------------------------
 
 Sujet du projet de Génie Logiciel :
 
@@ -42,3 +46,7 @@ deux packages réutilisables pour d’autres jeux de cartes, l’un permettant d
 manipuler des cartes, paquets de cartes, mains de joueurs, etc., et l’autre permettant de
 gérer la représentation graphique de ces objets (par exemple, la représentation d’une main en
 éventail, d’un paquet de cartes faces cachées, etc.).
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Lien GitHub => https://github.com/Draxxo/BlackJack_GL
