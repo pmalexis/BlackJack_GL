@@ -7,8 +7,10 @@ import model.cards.Carte;
 import model.cards.Couleur;
 import model.cards.Paquet;
 
-
-
+/**
+ * Classe qui permet de gérer toute les actions faite sur le model
+ * Toutes les méthodes ci-dessous sont appellé par le Controleur
+ */
 public class MoteurBlackjack extends Observable{
 	
 	private final int NB_CARDS_BY_HANDS_START = 2;
@@ -18,30 +20,28 @@ public class MoteurBlackjack extends Observable{
 	
 	private Paquet paquet; //Le paquet de carte
 	
-	/*
+	/**
 	 * Constructor
 	 */
 	public MoteurBlackjack(){
         this.initAll();
     }
     
-    /*
-	 * add a player
-	 */
+    /**
+     * add a player
+     * @param player
+     * @return boolean
+     */
     public boolean addPlayer(Player player) {
         if(this.tabPlayers.size() == NB_PLAYERS_MAX) return false;
         this.tabPlayers.add(player);
         return true;
     }
     
-    public boolean delPlayer(Player player) {
-        return this.tabPlayers.remove(player);
-    }
-    
-	/*
+	/**
 	 * initialization of the paquet and tabPlayers
 	 */
-	public boolean initAll() {
+	public void initAll() {
 		this.tabPlayers = new ArrayList<Player>();
         this.tabPlayers.add(new Player("Croupier", 0));
 		this.paquet = new Paquet();
@@ -54,22 +54,18 @@ public class MoteurBlackjack extends Observable{
 				}
             }
         }
-			
-		return true;
 	}
 	
-	/*
-	 * distribution
+	/**
+	 * distribution of cards for all players / bots
 	 */
-	public boolean distribution() {
+	public void distribution() {
 		this.paquet.mixCards();
 		
 		for(int i=0;i<this.NB_CARDS_BY_HANDS_START;i++) 
 			for(int j=0;j<tabPlayers.size();j++) {
 				this.tabPlayers.get(j).getHand().addTop(this.paquet.dropTop());
 			}
-		
-		return true;
 	}
 	
 	

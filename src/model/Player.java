@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import model.cards.Carte;
 import model.cards.Paquet;
 
+/**
+ * Cette classe permet de stoker toutes les informations du joueur / bot
+ */
 public class Player {
 
 	private String name;
@@ -22,6 +25,11 @@ public class Player {
 	
 	private boolean turnDown = false;
 	
+	/**
+	 * Constructeur
+	 * @param name of player
+	 * @param money of player (5555 by default)
+	 */
 	public Player(String name, int money) {
 		this.name = name;
 		
@@ -37,11 +45,18 @@ public class Player {
 		this.insuranceSplit = 0;
 	}
     
+	/**
+	 * reset hands
+	 */
     public void resetHand() {
         this.hand      = new Paquet();
 		this.handSplit = new Paquet(); 
     }
 	
+    /**
+     * @param split (if you want the value of the hand split or not
+     * @return the value of your hand
+     */
     public int computeValue(boolean split) {
 		int n  = 0;
 		int as = 0;
@@ -65,72 +80,115 @@ public class Player {
 		return n;
 	}
 	
-	/* --------------------------- *
-	 *   GET - return the values
-	 * --------------------------- */
+	/**
+	 * @return name
+	 */
 	public String getName() {
 		return this.name;
 	}
 	
+	/**
+	 * @return hand
+	 */
 	public Paquet getHand() {
 		return this.hand;
 	}
 	
+	/**
+	 * @return hand split
+	 */
 	public Paquet getSplit() {
 		return this.handSplit;
 	}
 	
+	/**
+	 * @return money
+	 */
 	public int getMoney() {
 		return this.money;
 	}
 	
+	/**
+	 * @return bet
+	 */
 	public int getBet() {
 		return this.bet;
 	}
 	
+	/**
+	 * @return bet split
+	 */
 	public int getBetSplit() {
 		return this.betSplit;
 	}
 	
+	/**
+	 * @return insurance
+	 */
 	public int getInsurance() {
 		return this.insurance;
 	}
 	
-	public boolean getTurnDown() {
-		return turnDown;
-	}
-
+	/**
+	 * @return insurance split
+	 */
 	public int getInsuranceSplit() {
 		return this.insuranceSplit;
 	}
 	
-	/* --------------------------- *
-	 *   SET - change the values
-	 * --------------------------- */
+	/**
+	 * @return turnDown
+	 */
+	public boolean getTurnDown() {
+		return turnDown;
+	}
+
+	
+	/**
+	 * @param n (change value of money)
+	 */
 	public void setMoney(int n) {
 		this.money = n;
 	}
 	
+	/**
+	 * @param n (change value of betSplit)
+	 */
 	public void setBetSplit(int n) {
 		this.betSplit = n;
 	}
 	
+	/**
+	 * @param n (change value of bet)
+	 */
 	public void setBet(int n) {
 		this.bet = n;
 	}
 	
+	/**
+	 * @param n (change value of insurance)
+	 */
 	public void setInsurance(int n) {
 		this.insurance = n;
 	}
 	
+	/**
+	 * @param n (change value of insuranceSplit)
+	 */
 	public void setInsuranceSplit(int n) {
 		this.insuranceSplit = n;
 	}
 	
+	/**
+	 * @param s (change value of Name)
+	 */
 	public void setName(String s) {
 		this.name = s;
 	}
 	
+	/**
+	 * @param n (change value of turnDown)
+	 */
 	public void setTurnDown(boolean turnDown) {
 		this.turnDown = turnDown;
 	}

@@ -7,30 +7,33 @@ public class Paquet {
 
 	private ArrayList<Carte> alCard;
 	
-	/*
+	/**
 	 * Constructor
 	 */
 	public Paquet() {
 		this.alCard =  new ArrayList<Carte>();
 	}
 	
-	/*
+	/**
 	 * Add card top
+	 * @param Carte
 	 */
 	public void addTop(Carte c) {
 		this.alCard.add(c);
 	}
 	
-	/*
+	/**
 	 * Add card bottom
+	 * @param Carte
 	 */
 	public void addBot(Carte c) {
 		if(this.alCard.isEmpty()) this.addTop(c);
 		else this.alCard.add(0, c);
 	}
 	
-	/*
+	/**
 	 * remove card top
+	 * @return Carte (droped card)
 	 */
 	public Carte dropTop() {
 		if(this.alCard.isEmpty()) return null;
@@ -38,8 +41,9 @@ public class Paquet {
 		return this.alCard.remove(this.alCard.size()-1);
 	}
 	
-	/*
+	/**
 	 * remove card bot
+	 * @return Carte (droped card)
 	 */
 	public Carte dropBot() {
 		if(this.alCard.isEmpty()) return null;
@@ -47,8 +51,9 @@ public class Paquet {
 		return this.alCard.remove(0);
 	}
 	
-	/*
+	/**
 	 * Draw a card random
+	 * @return Carte
 	 */
 	public Carte drawRandom() {
 		if(this.alCard.isEmpty()) return null;
@@ -57,8 +62,9 @@ public class Paquet {
 		return this.alCard.remove(index);
 	}
 	
-	/*
+	/**
 	 * Mix cards
+	 * @return boolean true if mix are ok
 	 */
 	public boolean mixCards() {
 		if(this.alCard.isEmpty()) return false;
@@ -67,8 +73,9 @@ public class Paquet {
 		return true;
 	}
 	
-	/*
+	/**
 	 * Cut pack card
+	 * @return boolean true if cut are ok
 	 */
 	public boolean cutPack() {
 		if(this.alCard.isEmpty()) return false;
@@ -87,9 +94,9 @@ public class Paquet {
 		return true;
 	}
 	
-	/* --------------------------- *
-	 *   GET - return the values
-	 * --------------------------- */
+	/**
+	 * @return ArrayList<Carte>
+	 */
 	public ArrayList<Carte> getAlCard() {
 		return this.alCard;
 	}
