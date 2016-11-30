@@ -6,7 +6,17 @@ Création d'un Blackjack (MVC) avec une IA - projet L3 Info
 - Lucas Gouédard - 21506676
 - Nicolas Vatel - 21410740
 
-PARTIE LUCAS - ANT - BUILT 
+Ant - build.xml
+
+Le projet fonctionne via Ant. Ce dernier est basé sur le build.xml utilisé en cours.
+Voici les target à lancer pour pouvoir tester le projet :
+$ ant compile
+$ ant run-dist
+Pour finir voici les targets à lancer pour effectuer les tests et générer les rapports :
+$ ant compile-test
+$ ant junit
+$ ant junitreport
+
 
 Comment fonctionnent les bots ?
 
